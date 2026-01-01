@@ -1,4 +1,5 @@
 using EZInput;
+using GameFramework.Movements;
 using GameFrameWork;
 using GameFrameWork.Core;
 using GameFrameWork.Entities;
@@ -25,7 +26,8 @@ namespace JungleJumper
         float deltaTime = 0.016f;
         PhysicsSystem physics = new PhysicsSystem();
         CollisionSystem collisions = new CollisionSystem();
-        System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
+        System.Windows.Forms.Timer gameTimer = new System.Windows.Forms.Timer();
+        string player_assetPath = Application.StartupPath + "\\Assets\\Player\\";
 
         public GameForm()
         {
@@ -34,100 +36,56 @@ namespace JungleJumper
             gameTimer.Interval = 16;    // ~60 Frames Per Second
             gameTimer.Tick += gameTimer_Tick;
             gameTimer.Start();
-            Setting();
+            SetupPlayer();
         }
 
         private void SetupPlayer()
         {
             Player hero = new Player
             {
+                Sprite = Image.FromFile(player_assetPath + "player_Idle.gif"),
                 Position = new PointF(100, 300),
                 Size = new Size(50, 50),
-                Sprite = Properties.Resources.player_idle,
                 HasPhysics = true  // This allows gravity to pull him down
             };
 
             hero.AddMovement(new KeyboardMovement(5)); // Speed of 5
-            hero.AddMovement(new JumpingMovement(10)); // Jump strength of 10
-
+            hero.AddMovement(new JumpingMovement(10f, 0.5f, 350f));
+            
             game.AddObject(hero);
         }
 
 
-        private void CreateLevel1()
-        {
-            // Create a ground platform
-            for (int i = 0; i < 10; i++)
-            {
-                game.AddObject(new GameObject
-                {
-                    Position = new PointF(i * 50, 400),
-                    Size = new Size(50, 50),
-                    IsRigidBody = true, // Player won't fall through this
-                    Sprite = Properties.Resources.grass_tile
-                });
-            }
-        }
+        //private void CreateLevel1()
+        //{
+        //    // Create a ground platform
+        //    for (int i = 0; i < 10; i++)
+        //    {
+        //        game.AddObject(new GameObject
+        //        {
+        //            Position = new PointF(i * 50, 400),
+        //            Size = new Size(50, 50),
+        //            IsRigidBody = true, // Player won't fall through this
+        //            Sprite = Properties.Resources.grass_tile
+        //        });
+        //    }
+        //}
 
 
-        private void AddEnemy()
-        {
-            Enemy monster = new Enemy
-            {
-                Position = new PointF(400, 350),
-                Size = new Size(40, 40),
-                Sprite = Properties.Resources.enemy_walk
-            };
+        //private void AddEnemy()
+        //{
+        //    Enemy monster = new Enemy
+        //    {
+        //        Position = new PointF(400, 350),
+        //        Size = new Size(40, 40),
+        //        Sprite = Properties.Resources.enemy_walk
+        //    };
 
-            // Walk between X=300 and X=600
-            monster.AddMovement(new HorizontalPatrolMovement(300, 600, 2));
+        //    // Walk between X=300 and X=600
+        //    monster.AddMovement(new HorizantalMovement(300, 600, 2));
 
-            game.AddObject(monster);
-        }
-
-
-        private void Setting()
-        {
-
-            player = new Player(Properties.Resources.spacePlayer, new PointF(300, 300), 2);
-            player.Size = new SizeF(100, 100);
-
-            KeyboardMovement keyboardMovement = new KeyboardMovement(2);
-            player.Movement = keyboardMovement;
-            player.AddMovement(keyboardMovement);
-            gameObjects.Add(player);
-
-            game.AddObject(new Player
-            {
-                //Sprite = Resources.playersprite,
-                Position = new PointF(100, 200),
-                Size = new Size(100, 100),
-                Movement = new KeyboardMovement()
-            });
-
-            game.AddObject(new Player
-            {
-                Position = new PointF(250, 100),
-                Size = new Size(100, 100),
-                HasPhysics = true,
-                // Movement = new PatrolMovement(left: 100, right: 500)
-            });
-
-            // A physics enabled rigid player — will stop on collision and gravity will be disabled
-            game.AddObject(new Player
-            {
-                Position = new PointF(250, 350),
-                Size = new Size(40, 40),
-                IsRigidBody = true
-            });
-
-            game.AddObject(new Enemy
-            {
-                Position = new PointF(300, 100),
-                Size = new Size(50, 50),
-                HasPhysics = false // Enable physics with default gravity
-            });
-        }
+        //    game.AddObject(monster);
+        //}
 
         private void gameTimer_Tick(object sender, EventArgs e)
         {
@@ -146,5 +104,12 @@ namespace JungleJumper
             // 5. Refresh the screen
             Invalidate();
         }
+
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            // This tells your engine to draw the sprites on the screen
+            game.Draw(e.Graphics);
+        }
+
     }
 }

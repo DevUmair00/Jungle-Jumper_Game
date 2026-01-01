@@ -2,11 +2,18 @@
 using System.Drawing;
 using System.Linq;
 using GameFrameWork.Entities;
+using GameFrameWork.Component;
+using GameFrameWork.Core;
+using GameFrameWork.Extentions;
+using GameFrameWork.Interfaces;
+using GameFrameWork.Movements;
+using GameFrameWork.System;
+
 
 namespace GameFrameWork.Core
 {
 
-    public partial class Game
+    public class Game
     {
         private List<GameObject> objects = new List<GameObject>();
 

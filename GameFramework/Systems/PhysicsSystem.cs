@@ -2,9 +2,14 @@
 using System.Drawing;
 using System.Linq;
 using GameFrameWork.Entities;
+using GameFrameWork.Component;
+using GameFrameWork.Core;
+using GameFrameWork.Extentions;
 using GameFrameWork.Interfaces;
+using GameFrameWork.Movements;
+using GameFrameWork.System;
 
-namespace GameFrameWork
+namespace GameFrameWork.System
 {
     public class PhysicsSystem
     {

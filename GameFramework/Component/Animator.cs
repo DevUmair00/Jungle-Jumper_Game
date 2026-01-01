@@ -1,11 +1,13 @@
-﻿using GameFrameWork.Core;
-using GameFrameWork.Interfaces;
-using GameFrameWork.Entities;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using GameFrameWork.Entities;
+using GameFrameWork.Component;
+using GameFrameWork.Core;
+using GameFrameWork.Extentions;
+using GameFrameWork.Interfaces;
+using GameFrameWork.Movements;
+using GameFrameWork.System;
 
 namespace GameFrameWork.Component
 {

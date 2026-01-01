@@ -1,7 +1,13 @@
-﻿using System.Drawing;
-using GameFrameWork.Interfaces;
+﻿using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using GameFrameWork.Entities;
+using GameFrameWork.Component;
+using GameFrameWork.Core;
 using GameFrameWork.Extentions;
+using GameFrameWork.Interfaces;
 using GameFrameWork.Movements;
+using GameFrameWork.System;
 
 namespace GameFrameWork.Entities
 {
@@ -16,6 +22,7 @@ namespace GameFrameWork.Entities
         public int Score { get; set; } = 0;
 
 
+        public Player() { }
 
         public Player(Image sprite , PointF startPos , float speed) 
         {

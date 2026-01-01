@@ -1,25 +1,26 @@
-﻿using GameFrameWork;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.Drawing;
-using GameFrameWork.Interfaces;
+using System.Linq;
 using GameFrameWork.Entities;
+using GameFrameWork.Component;
+using GameFrameWork.Core;
+using GameFrameWork.Extentions;
+using GameFrameWork.Interfaces;
+using GameFrameWork.Movements;
+using GameFrameWork.System;
 using EZInput;
 
 
-namespace GameFramework.Movements
+namespace GameFrameWork.Movements
 {
-    internal class JumpingMovement : IMovement
+    public class JumpingMovement : IMovement
     {
 
-        private float jumpForce;
-        private float gravity;
-        private float groundY;
-        private float verticalVelocity = 0;
-        private bool isJumping = false;
+        public float jumpForce;
+        public float gravity;
+        public float groundY;
+        public float verticalVelocity = 0;
+        public bool isJumping = false;
 
         public JumpingMovement(float jumpForce, float gravity, float groundY)
         {
