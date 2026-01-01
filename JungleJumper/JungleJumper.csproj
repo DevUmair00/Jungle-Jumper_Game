@@ -9,9 +9,19 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Characters\" />
-    <Folder Include="Assets\" />
-    <Folder Include="Levels\" />
+    <Compile Remove="Assets\**" />
+    <Compile Remove="Characters\**" />
+    <Compile Remove="Levels\**" />
+    <EmbeddedResource Remove="Assets\**" />
+    <EmbeddedResource Remove="Characters\**" />
+    <EmbeddedResource Remove="Levels\**" />
+    <None Remove="Assets\**" />
+    <None Remove="Characters\**" />
+    <None Remove="Levels\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\GameFramework\GameFramework.csproj" />
   </ItemGroup>
 
 </Project>
