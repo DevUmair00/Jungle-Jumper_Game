@@ -28,18 +28,28 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
+            gameTimer = new System.Windows.Forms.Timer(components);
             SuspendLayout();
+            // 
+            // gameTimer
+            // 
+            gameTimer.Enabled = true;
+            gameTimer.Interval = 16;
+            gameTimer.Tick += gameTimer_Tick;
             // 
             // GameForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(784, 600);
             Name = "GameForm";
             Text = "GameForm";
             ResumeLayout(false);
         }
 
         #endregion
+
+        public System.Windows.Forms.Timer gameTimer;
     }
 }

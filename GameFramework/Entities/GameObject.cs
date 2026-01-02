@@ -94,11 +94,4 @@ namespace GameFrameWork.Entities
             // Default behavior: Do nothing
         }
     }
-
-    public class Level
-    {
-        public int Number;
-        public List<GameObject> Enemies;
-        /* ... */
-    }
 }

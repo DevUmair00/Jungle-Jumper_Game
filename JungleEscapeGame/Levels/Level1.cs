@@ -1,41 +1,102 @@
-﻿using GameFrameWork.Core;
-using GameFrameWork.Entities;
-using JungleEscapeGame.Characters;
-using System.Collections.Generic;
-using System.Drawing;
+﻿//using GameFrameWork.Core;
+//using GameFrameWork.Entities;
+//using GameFrameWork.Movements;
+//using System.Collections.Generic;
+//using System.Drawing;
 
-namespace JungleEscapeGame.Levels
-{
-    public class Level1
-    {
-        List<GameObject> objects = new List<GameObject>();
+//namespace JungleEscapeGame.Levels
+//{
+//    public class Level1
+//    {
 
-        public Level1()
-        {
-            PlayerCharacter player = new PlayerCharacter(
-                Properties.Resources.player,
-                new PointF(200, 200)
-            );
 
-            EnemyCharacter enemy = new EnemyCharacter(
-                Properties.Resources.enemy1,
-                new PointF(400, 200)
-            );
+//Position = new PointF(0, 0);
+//Position = new PointF(500, 300);
+//Position = new PointF(1200, 600);
 
-            objects.Add(player);
-            objects.Add(enemy);
-        }
 
-        public void Update(GameTime gameTime)
-        {
-            foreach (var obj in objects)
-                obj.Update(gameTime);
-        }
 
-        public void Draw(Graphics g)
-        {
-            foreach (var obj in objects)
-                obj.Draw(g);
-        }
-    }
-}
+
+//        private List<GameObject> objects;
+
+//        public Level1()
+//        {
+//            objects = new List<GameObject>();
+
+//            CreatePlayer();
+//            CreateWall();
+//            CreateExit();
+//        }
+
+
+//        // ---------------- PLAYER ----------------
+//        private void CreatePlayer()
+//        {
+//            Player player = new Player(
+
+//                Properties.Resources.player,
+//                new PointF(50, 50),
+//                2
+//            );
+
+//            player.Size = new SizeF(32, 32);
+//            player.AddMovement(new KeyboardMovement(3));
+
+//            objects.Add(player);
+//        }
+
+
+
+//        // ---------------- WALL ----------------
+//        private void CreateWall()
+//        {
+//            GameObject wall = new GameObject(
+//                Properties.Resources.largeBox,
+//                new PointF(150, 50)
+//            );
+
+//            wall.Size = new SizeF(32, 32);
+//            objects.Add(wall);
+//        }
+
+
+
+
+//        // ---------------- EXIT ----------------
+//        private void CreateExit()
+//        {
+//            GameObject exitDoor = new GameObject(
+//                Properties.Resources.exit,
+//                new PointF(300, 50)
+//            );
+
+//            exitDoor.Size = new SizeF(32, 32);
+//            objects.Add(exitDoor);
+//        }
+
+
+
+
+//        // ---------------- UPDATE ----------------
+
+//        public void Update(GameTime gameTime)
+//        {
+//            foreach (GameObject obj in objects)
+//            {
+//                obj.Update(gameTime);
+//            }
+//        }
+
+
+
+
+//        // ---------------- DRAW ----------------
+//        public void Draw(Graphics g)
+//        {
+//            foreach (GameObject obj in objects)
+//            {
+//                obj.Draw(g);
+//            }
+//        }
+//    }
+//}
