@@ -1,4 +1,4 @@
-namespace JungleJumper
+namespace JungleEscapeGame
 {
     internal static class Program
     {

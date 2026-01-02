@@ -1,4 +1,4 @@
-﻿namespace JungleJumper
+﻿namespace JungleEscapeGame
 {
     partial class GameForm
     {
@@ -28,15 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            components = new System.ComponentModel.Container();
-            gameTimer = new System.Windows.Forms.Timer(components);
             SuspendLayout();
-            // 
-            // gameTimer
-            // 
-            gameTimer.Enabled = true;
-            gameTimer.Interval = 16;
-            gameTimer.Tick += gameTimer_Tick;
             // 
             // GameForm
             // 
@@ -49,7 +41,5 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.Timer gameTimer;
     }
 }
