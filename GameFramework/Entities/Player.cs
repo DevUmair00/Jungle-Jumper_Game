@@ -17,6 +17,11 @@ namespace GameFrameWork.Entities
         // Different movement behaviors can be injected (KeyboardMovement, PatrolMovement, etc.).
         public IMovement? Movement { get; set; }
 
+        // Animator for sprite animations
+        public IAnimator? Animator { get; set; }
+
+        public bool IsMoving { get; set; } = false;
+
         // Domain state
         public int Health { get; set; } = 100;
         public int Score { get; set; } = 0;
@@ -38,7 +43,20 @@ namespace GameFrameWork.Entities
         /// 
         public override void Update(GameTime gameTime)
         {
-            Movement?.Move(this, gameTime);
+            // Prefer the Movements collection (allows multiple movement behaviours).
+            if (Movements != null && Movements.Count > 0)
+            {
+                ApplyMovements(gameTime);
+            }
+            else
+            {
+                // Fallback to single Movement property for backwards compatibility
+                Movement?.Move(this, gameTime);
+            }
+
+            // Update animator (if any) using frame delta
+            Animator?.Update(gameTime.DeltaTime);
+
             base.Update(gameTime);
         }
 

@@ -17,7 +17,7 @@ namespace GameFrameWork.Movements
     {
 
         public float jumpForce;
-        public float gravity;
+        public float gravity = 5;
         public float groundY;
         public float verticalVelocity = 0;
         public bool isJumping = false;
