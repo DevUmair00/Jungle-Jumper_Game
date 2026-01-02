@@ -17,6 +17,10 @@ namespace GameFrameWork.Entities
         // Optional movement behavior: demonstrates composition and allows testable movement logic.
         public IMovement? Movement { get; set; }
 
+
+        public bool IsMoving { get; set; } = false;
+
+
         // Default enemy velocity is set in constructor to give basic movement out-of-the-box.
         public Enemy()
         {
@@ -27,9 +31,11 @@ namespace GameFrameWork.Entities
         {
             this.Sprite = sprite;
             this.Position = startPos;
-            this.Movement = new HorizantalMovement(600,300,speed);
+            this.Movement = new HorizantalMovement(600,300, speed);
             this.Size = new Size(sprite.Width, sprite.Height);
         }
+ 
+
 
         /// Update will call movement behavior (if any) and then apply base update to move by velocity.
         public override void Update(GameTime gameTime)

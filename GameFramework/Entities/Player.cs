@@ -62,6 +62,7 @@ namespace GameFrameWork.Entities
         }
 
         /// Collision reaction for the player. Demonstrates single responsibility: domain reaction is handled here.
+
         public override void OnCollision(GameObject other)
         {
             if (other is Enemy)
@@ -69,6 +70,17 @@ namespace GameFrameWork.Entities
 
             if (other is PowerUp)
                 Health += 20;
+
+            if (other.IsRigidBody)
+            {
+                Velocity = PointF.Empty;
+            }
+            base.OnCollision(other);
+
+            //if (other.Sprite == JungleEscapeGame.Properties.Resources.exit)
+            //{
+            //    // level complete / handle win
+            //}
         }
     }
 
