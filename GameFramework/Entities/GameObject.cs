@@ -57,6 +57,10 @@ namespace GameFrameWork.Entities
         // Optional sprite for rendering
         public Image? Sprite { get; set; } = null;
 
+
+        public bool Visible { get; set; } = true;
+
+
         // Bounds of the object for collision detection
         // Exposed as a computed property rather than stored state (keeps consistency)
         public RectangleF Bounds => new RectangleF(Position, Size);
@@ -73,18 +77,19 @@ namespace GameFrameWork.Entities
         // This is an example of polymorphism and the Open/Closed Principle: new rendering options can be added in subclasses by overriding Draw.
         public virtual void Draw(Graphics graphics)
         {
-            if (Sprite != null)
+            if (Visible == true && Sprite != null)
             {
                 graphics.DrawImage(Sprite, Bounds);
             }
             else
             {
-                using (Brush brush = new SolidBrush(Color.Gray)) // Default color
+                using (Brush brush = new SolidBrush(Color.Transparent)) // Default color
                 {
                     graphics.FillRectangle(brush, Bounds);
                 }
             }
         }
+
 
         // Called when this object collides with another. Default does nothing.
         // Override in derived classes to implement domain-specific reactions (damage, pickup, deactivate).

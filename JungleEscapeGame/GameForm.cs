@@ -36,19 +36,27 @@ namespace JungleEscapeGame
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            DrawBackground(e.Graphics);
+            if (this.Visible = true && game != null)
+            {
 
-            e.Graphics.TranslateTransform(-cameraOffset.X, 0); // side scrolling only
-            game.Draw(e.Graphics);
-            e.Graphics.ResetTransform();
+                DrawBackground(e.Graphics);
+
+                e.Graphics.TranslateTransform(-cameraOffset.X, 0); // side scrolling only
+                game.Draw(e.Graphics);
+                e.Graphics.ResetTransform();
+            }
         }
 
         private void DrawBackground(Graphics g)
         {
-            g.DrawImage(
+            if (this.Visible = true && game != null)
+            {
+                g.DrawImage(
                 Properties.Resources.bg1,
                 new Rectangle(0, 0, 1600, 400)
-            );
+                );
+            }
+            
         }
 
         private void gameTimer_Tick(object sender, EventArgs e)

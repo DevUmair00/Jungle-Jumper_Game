@@ -88,7 +88,6 @@ namespace GameFrameWork.Entities
             base.Draw(g);
         }
 
-
         public override void OnCollision(GameObject other)
         {
             if (other.IsRigidBody)
