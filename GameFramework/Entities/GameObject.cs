@@ -55,6 +55,9 @@ namespace GameFrameWork.Entities
         public bool IsRigidBody { get; set; } = false;
 
         // Optional sprite for rendering
+
+
+
         public Image? Sprite { get; set; } = null;
 
 

@@ -9,6 +9,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="GameManage\**" />
+    <EmbeddedResource Remove="GameManage\**" />
+    <None Remove="GameManage\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="EZInput" Version="1.3.2" />
     <PackageReference Include="NAudio" Version="2.2.1" />
   </ItemGroup>

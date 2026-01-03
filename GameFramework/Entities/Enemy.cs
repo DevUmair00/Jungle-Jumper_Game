@@ -47,7 +47,14 @@ namespace GameFrameWork.Entities
         /// Custom draw: demonstrates polymorphism (override base draw to provide enemy visuals).
         public override void Draw(Graphics g)
         {
-            g.FillRectangle(Brushes.Red, Bounds);
+            if (Sprite != null)
+            {
+                base.Draw(g);
+            }
+            else
+            {
+                g.FillRectangle(Brushes.Red, Bounds);
+            }
         }
 
         /// On collision, enemy deactivates when hit by bullets (encapsulation of reaction logic inside the entity).

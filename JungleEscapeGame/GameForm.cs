@@ -22,12 +22,16 @@ namespace JungleEscapeGame
         private PointF cameraOffset = PointF.Empty;
         private float deltaTime = 0.016f;
 
+        float worldWidth = 2500f;
+        float worldHeight = 500f;
+
+
         public GameForm()
         {
             InitializeComponent();
 
             DoubleBuffered = true;
-            ClientSize = new Size(800, 400);
+            ClientSize = new Size(800, 500);
 
             level = new Level1();
             level.Load(game);
@@ -52,11 +56,10 @@ namespace JungleEscapeGame
             if (this.Visible = true && game != null)
             {
                 g.DrawImage(
-                Properties.Resources.bg1,
-                new Rectangle(0, 0, 1600, 400)
+                    Properties.Resources.bg1,
+                    new Rectangle(0, 0, 2500, 500)
                 );
             }
-            
         }
 
         private void gameTimer_Tick(object sender, EventArgs e)
@@ -76,9 +79,15 @@ namespace JungleEscapeGame
 
             // CAMERA FOLLOWS PLAYER (X only)
             cameraOffset = new PointF(
-                player.Position.X - ClientSize.Width / 2,
-                0
-            );
+
+                Math.Max(0, Math.Min(
+                    player.Position.X - ClientSize.Width / 2,
+                    worldWidth - ClientSize.Width)),
+
+               Math.Max(0, Math.Min(
+                    player.Position.Y - ClientSize.Height / 2,
+                    worldHeight - ClientSize.Height))
+             );
 
             Invalidate();
         }
