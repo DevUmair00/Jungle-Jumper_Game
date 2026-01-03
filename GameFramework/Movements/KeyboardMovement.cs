@@ -28,16 +28,27 @@ namespace GameFrameWork.Movements
         {
 
             if (Keyboard.IsKeyPressed(Key.LeftArrow))
+            {
+                obj.HasPhysics = true;
                 obj.Position = new PointF(obj.Position.X - Speed, obj.Position.Y);
+            }
 
-            if (Keyboard.IsKeyPressed(Key.UpArrow))
-                obj.Position = new PointF(obj.Position.X, obj.Position.Y - Speed);
+            //if (Keyboard.IsKeyPressed(Key.UpArrow))
+            //{
+            //    obj.Position = new PointF(obj.Position.X, obj.Position.Y - Speed);
+            //}
 
             if (Keyboard.IsKeyPressed(Key.RightArrow))
+            { 
+                obj.HasPhysics = true;
                 obj.Position = new PointF(obj.Position.X + Speed, obj.Position.Y);
+            }
 
             if (Keyboard.IsKeyPressed(Key.DownArrow))
+            {
+                obj.HasPhysics = true;
                 obj.Position = new PointF(obj.Position.X, obj.Position.Y + Speed);
+            }
         }
     }
 }

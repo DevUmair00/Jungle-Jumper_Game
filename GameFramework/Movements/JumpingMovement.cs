@@ -1,65 +1,35 @@
-﻿using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using GameFrameWork.Entities;
-using GameFrameWork.Component;
+﻿using EZInput;
 using GameFrameWork.Core;
-using GameFrameWork.Extentions;
+using GameFrameWork.Entities;
 using GameFrameWork.Interfaces;
-using GameFrameWork.Movements;
-using GameFrameWork.System;
-using EZInput;
-
+using System.Drawing;
 
 namespace GameFrameWork.Movements
 {
     public class JumpingMovement : IMovement
     {
+        private float jumpForce;
+        private bool canJump = true;
 
-        public float jumpForce;
-        public float gravity = 5;
-        public float groundY;
-        public float verticalVelocity = 0;
-        public bool isJumping = false;
-
-        public JumpingMovement(float jumpForce, float gravity, float groundY)
+        public JumpingMovement(float jumpForce)
         {
             this.jumpForce = jumpForce;
-            this.gravity = gravity;
-            this.groundY = groundY;
         }
 
         public void Move(GameObject obj, GameTime gameTime)
         {
-            // 1. Listen for Input: If Space is pressed and we aren't already jumping
-            if (Keyboard.IsKeyPressed(Key.UpArrow) && !isJumping)
+            if (Keyboard.IsKeyPressed(Key.UpArrow) && canJump)
             {
-                verticalVelocity = -jumpForce; 
-                isJumping = true;
+                obj.Velocity = new PointF(obj.Velocity.X, -jumpForce);
+                obj.HasPhysics = true;   // gravity ON
+                canJump = false;         // prevent double jump
             }
+        }
 
-            // 2. Physics Logic: If we are in the air, apply gravity
-            if (isJumping)
-            {
-                // Increase velocity by gravity over time
-                verticalVelocity += gravity;
-
-                // Update the object's position
-                obj.Position = new PointF(
-                    obj.Position.X,
-                    obj.Position.Y + verticalVelocity
-                );
-
-                // 3. Collision Detection (Simple Ground Check)
-                if (obj.Position.Y >= groundY)
-                {
-                    obj.Position = new PointF(obj.Position.X, groundY); // Snap to floor
-                    verticalVelocity = 0;
-                    isJumping = false; // We landed!
-                }
-            }
+        // Called when player lands on floor
+        public void ResetJump()
+        {
+            canJump = true;
         }
     }
 }
-
-

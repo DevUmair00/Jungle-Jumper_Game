@@ -24,6 +24,10 @@ namespace GameFrameWork.Entities
         public int Score { get; set; } = 0;
 
 
+        private float fireCooldown = 0.3f;   // seconds
+        private float fireTimer = 0f;
+
+
         public Player() { }
 
         public Player(Image sprite , PointF startPos , float speed) 
@@ -40,6 +44,8 @@ namespace GameFrameWork.Entities
         /// 
         public override void Update(GameTime gameTime)
         {
+            fireTimer -= gameTime.DeltaTime;
+
             // Prefer the Movements collection (allows multiple movement behaviours).
             if (Movements != null && Movements.Count > 0)
             {
@@ -54,34 +60,59 @@ namespace GameFrameWork.Entities
             base.Update(gameTime);
         }
 
+        public Bullet Fire()
+        {
+            if (fireTimer > 0)
+                return null;
+
+            fireTimer = fireCooldown;
+
+            Bullet bullet = new Bullet
+            {
+                Position = new PointF(
+                    Position.X + Size.Width,
+                    Position.Y + Size.Height / 2 - 5
+                ),
+                Size = new SizeF(10, 5)
+            };
+
+            return bullet;
+        }
+
+
+
         /// Draw uses base implementation; override if player needs custom visuals.
-   
+
         public override void Draw(Graphics g)
         {
             base.Draw(g);
         }
 
-        /// Collision reaction for the player. Demonstrates single responsibility: domain reaction is handled here.
 
         public override void OnCollision(GameObject other)
         {
-            if (other is Enemy)
-                Health -= 10;
-
-            if (other is PowerUp)
-                Health += 20;
-
             if (other.IsRigidBody)
             {
-                Velocity = PointF.Empty;
-            }
-            base.OnCollision(other);
+                RectangleF p = Bounds;
+                RectangleF o = other.Bounds;
 
-            //if (other.Sprite == JungleEscapeGame.Properties.Resources.exit)
-            //{
-            //    // level complete / handle win
-            //}
+                // Landing from top
+                if (p.Bottom >= o.Top && p.Top < o.Top)
+                {
+                    Position = new PointF(Position.X, o.Top - Size.Height);
+                    Velocity = new PointF(Velocity.X, 0);
+                    HasPhysics = false;
+
+                    // reset jump
+                    foreach (var m in Movements)
+                        if (m is JumpingMovement j)
+                            j.ResetJump();
+                }
+            }
         }
+
+
+
     }
 
 }
