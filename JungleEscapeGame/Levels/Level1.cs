@@ -33,15 +33,18 @@ namespace JungleEscapeGame.Levels
 
             // ================= ENEMIES =================
 
-            game.AddObject(new Enemy
+            Enemy = new Enemy
             {
                 Sprite = Properties.Resources.enemy1,
-                Position = new PointF(370, groundY - 60),
+                Position = new PointF(380, groundY - 60),
+                Movement = new PatrolMovement(380, 990),
                 Size = new SizeF(80, 60),
-                HasPhysics = true,
                 IsRigidBody = true,
-                Movement = new PatrolMovement(370, 1000)
-            });
+                HasPhysics = true
+            };
+            game.AddObject(Enemy);
+
+
 
             //game.AddObject(new Enemy
             //{
@@ -106,14 +109,14 @@ namespace JungleEscapeGame.Levels
 
             game.AddObject(new GameObject
             {
-                Position = new PointF(1340, groundY - 150),
+                Position = new PointF(1370, groundY - 150),
                 Size = new SizeF(250, 100),
                 Sprite = Properties.Resources.plus,
                 IsRigidBody = true
             });
             game.AddObject(new GameObject
             {
-                Position = new PointF(1710, groundY - 150),
+                Position = new PointF(1680, groundY - 150),
                 Size = new SizeF(250, 100),
                 Sprite = Properties.Resources.plus,
                 IsRigidBody = true
@@ -217,11 +220,56 @@ namespace JungleEscapeGame.Levels
             });
 
 
+            // ================= Key  =================
+
+
+                game.AddObject(new GameObject
+                {
+                    Name = "Key", // This is the secret! Use a Name or Tag property
+                    Position = new PointF(1600, groundY - 100),
+                    Size = new SizeF(35, 35),
+                    Sprite = Properties.Resources.key,
+                    IsRigidBody = false, // Set to false so the player can walk through it
+                    HasPhysics = false
+                });
+
+
+            // ================= COINS (Soul Shards) =================
+
+
+            for (int i = 1; i <= 7; i++)
+            {
+                game.AddObject(new GameObject
+                {
+                    Name = "Coin", // This is the secret! Use a Name or Tag property
+                    Position = new PointF(400+(i*80), groundY - 50),
+                    Size = new SizeF(20, 20),
+                    Sprite = Properties.Resources.coin,
+                    IsRigidBody = false, // Set to false so the player can walk through it
+                    HasPhysics = false,
+                    
+                });
+            }
+
+
+            for (int i = 1; i <= 8; i++)
+            {
+                game.AddObject(new GameObject
+                {
+                    Name = "Coin", // This is the secret! Use a Name or Tag property
+                    Position = new PointF(1250+(i*80), groundY - 35),
+                    Size = new SizeF(20, 20),
+                    Sprite = Properties.Resources.coin,
+                    IsRigidBody = false, // Set to false so the player can walk through it
+                    HasPhysics = false
+                });
+            }
 
 
             // ================= EXIT =================
             game.AddObject(new GameObject
             {
+                Name = "Exit",
                 Position = new PointF(worldWidth - 200, groundY - 250),
                 Size = new SizeF(200, 250),
                 Sprite = Properties.Resources.exit,

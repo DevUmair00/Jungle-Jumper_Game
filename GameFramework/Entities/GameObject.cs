@@ -17,6 +17,8 @@ namespace GameFrameWork.Entities
         // Position of the object in the game world (encapsulated state)
         public PointF Position { get; set; }
 
+        public string Name { get; set; } // // This is the secret! Use a Name or Tag property
+
         public List<IMovement> Movements { get; } = new List<IMovement>();
 
         public void AddMovement(IMovement movement)

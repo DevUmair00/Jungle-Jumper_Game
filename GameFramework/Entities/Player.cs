@@ -3,11 +3,13 @@ using System.Drawing;
 using System.Linq;
 using GameFrameWork.Entities;
 using GameFrameWork.Component;
+using System;
 using GameFrameWork.Core;
 using GameFrameWork.Extentions;
 using GameFrameWork.Interfaces;
 using GameFrameWork.Movements;
 using GameFrameWork.System;
+using System.Windows.Forms;    // Required for Form, PaintEventArgs, and Application
 
 namespace GameFrameWork.Entities
 {
@@ -22,6 +24,9 @@ namespace GameFrameWork.Entities
         // Domain state
         public int Health { get; set; } = 100;
         public int Score { get; set; } = 0;
+
+        public int Key { get; set; } = 0;
+
 
 
         private float fireCooldown = 0.3f;   // seconds
@@ -106,6 +111,57 @@ namespace GameFrameWork.Entities
                     foreach (var m in Movements)
                         if (m is JumpingMovement j)
                             j.ResetJump();
+                }
+            }
+
+            if(other.Name == "Coin")
+            {
+                // 1. Add Score
+                this.Score += 10;
+
+                // 2. Play Sound (Requirement 5)
+                // SoundManager.Play("pickup.wav");
+
+                // 3. Deactivate or Remove the coin
+                other.IsActive = false; // This makes it disappear
+
+                if (Application.OpenForms.Count > 0)
+                {
+                    Application.OpenForms[0].Invalidate();
+                }
+            }
+
+            if(other.Name == "Key")
+            {
+                // 1. Add Score
+                this.Key++;
+
+                // 2. Play Sound (Requirement 5)
+                // SoundManager.Play("pickup.wav");
+
+                // 3. Deactivate or Remove the coin
+                other.IsActive = false; // This makes it disappear
+
+                if (Application.OpenForms.Count > 0)
+                {
+                    Application.OpenForms[0].Invalidate();
+                }
+            }
+
+            if(other.Name == "Exit")
+            {
+                // 1. Add Score
+                this.Key++;
+
+                // 2. Play Sound (Requirement 5)
+                // SoundManager.Play("pickup.wav");
+
+                // 3. Deactivate or Remove the coin
+                other.IsActive = false; // This makes it disappear
+
+                if (Application.OpenForms.Count > 0)
+                {
+                    Application.OpenForms[0].Invalidate();
                 }
             }
         }

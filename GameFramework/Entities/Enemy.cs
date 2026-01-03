@@ -1,13 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using GameFrameWork.Entities;
+﻿using DocumentFormat.OpenXml.Drawing.Charts;
 using GameFrameWork.Component;
 using GameFrameWork.Core;
+using GameFrameWork.Entities;
 using GameFrameWork.Extentions;
 using GameFrameWork.Interfaces;
 using GameFrameWork.Movements;
 using GameFrameWork.System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
 
 namespace GameFrameWork.Entities
 {
@@ -34,7 +35,9 @@ namespace GameFrameWork.Entities
             this.Movement = new HorizantalMovement(600,300, speed);
             this.Size = new Size(sprite.Width, sprite.Height);
         }
- 
+
+
+        private bool facingRight = true;
 
 
         /// Update will call movement behavior (if any) and then apply base update to move by velocity.
@@ -57,11 +60,38 @@ namespace GameFrameWork.Entities
             }
         }
 
+
         /// On collision, enemy deactivates when hit by bullets (encapsulation of reaction logic inside the entity).
         public override void OnCollision(GameObject other)
         {
             if (other is Bullet)
+            { 
                 IsActive = false;
+            }
+
+            if (other is Player)
+                other. IsActive = false;
+
+            if (other.IsRigidBody)
+            {
+                Bitmap bmp = new Bitmap(this.Sprite);
+                bmp.RotateFlip(RotateFlipType.RotateNoneFlipX); // Flips horizontally
+                this.Sprite = bmp;
+            }
+
+            // Ignore coins and keys completely
+            if (other.Name == "Coin" || other.Name == "Key")
+                return;
         }
+
+        private void FlipSprite()
+        {
+            facingRight = !facingRight;
+
+            Bitmap bmp = new Bitmap(Sprite);
+            bmp.RotateFlip(RotateFlipType.RotateNoneFlipX);
+            Sprite = bmp;
+        }
+
     }
 }
