@@ -15,35 +15,58 @@ namespace GameFrameWork.Extentions
     public class Bullet : GameObject
     {
         // Bullets set a default velocity in the constructor - a simple example of behavior initialization.
+
         public Bullet()
         {
-            Velocity = new PointF(8, 0);
+            HasPhysics = false; // bullets ignore gravity
+            IsRigidBody = false;
         }
+
+
+        public float Speed { get; set; } = 5f;
+
+        public PointF Direction { get; set; } = new PointF(1, 0); // Default moves right
+
 
         /// Bullets use the default movement logic (base.Update) and deactivate when off-screen.
         /// Consider extending with continous collision detection (CCD) to avoid tunnelling at high speeds.
+
+
         public override void Update(GameTime gameTime)
         {
+            // Move bullet
+            Position = new PointF(Position.X + Direction.X * Speed, Position.Y + Direction.Y * Speed);
             base.Update(gameTime);
-
-            if (Position.X > 1000)
-                IsActive = false;
         }
+
+
 
         /// Simple visual representation for bullets (polymorphism example).
+
         public override void Draw(Graphics g)
         {
-            g.FillRectangle(Brushes.Yellow, Bounds);
+            if (Sprite != null)
+                base.Draw(g);
+            else
+                g.FillRectangle(Brushes.Yellow, Bounds);
         }
+
+
 
         /// On collision bullets deactivate when hitting an enemy.
         /// Keep collision reaction encapsulated in the object class.
+
         public override void OnCollision(GameObject other)
         {
-            if (other is Enemy || other.Name == "Wall")
+            if (other.IsRigidBody || other is Enemy || other.Name == "Box")
             {
-                this.IsActive = false;
+                IsActive = false;
             }
         }
+
+
+
+
+
     }
 }

@@ -83,7 +83,7 @@ namespace JungleEscapeGame.Levels
             });
 
 
-            // ================= LEFT WALL (BOUNDARY) =================
+            // ================= LEFT WALL (Start  BOUNDARY) =================
 
             game.AddObject(new GameObject
             {
@@ -116,10 +116,12 @@ namespace JungleEscapeGame.Levels
             });
 
 
+
+
             game.AddObject(new GameObject
             {
                 Name = "Wall",
-                Position = new PointF(1370, groundY - 190),
+                Position = new PointF(1370, groundY - 180),
                 Size = new SizeF(250, 100),
                 Sprite = Properties.Resources.plus,
                 IsRigidBody = true
@@ -127,7 +129,7 @@ namespace JungleEscapeGame.Levels
             game.AddObject(new GameObject
             {
                 Name = "Wall",
-                Position = new PointF(1685, groundY - 190),
+                Position = new PointF(1685, groundY - 180),
                 Size = new SizeF(250, 100),
                 Sprite = Properties.Resources.plus,
                 IsRigidBody = true
@@ -272,7 +274,7 @@ namespace JungleEscapeGame.Levels
             {
                 game.AddObject(new GameObject
                 {
-                    Name = "Coin", // This is the secret! Use a Name or Tag property
+                    Name = "Coin", // Tag property
                     Position = new PointF(400+(i*80), groundY - 50),
                     Size = new SizeF(20, 20),
                     Sprite = Properties.Resources.coin,
@@ -308,29 +310,33 @@ namespace JungleEscapeGame.Levels
             });
         }
 
+
         public void UpdateBullets(GameTime gameTime, Game game)
         {
-            // Handle Input and Spawning
-            if (EZInput.Keyboard.IsKeyPressed(EZInput.Key.Space)) // Assuming Space is Fire
+            // Spawn bullets
+            if (EZInput.Keyboard.IsKeyPressed(EZInput.Key.Space))
             {
                 var newBullet = Player.Fire();
                 if (newBullet != null)
                 {
                     Bullets.Add(newBullet);
-                    game.AddObject(newBullet); // Add to general system for collision/drawing
+                    game.AddObject(newBullet); // Add to Game's general object list
                 }
             }
 
-            // Cleanup: Remove inactive bullets from our local list
+            // Update bullet positions (optional, because Game.Update already updates them)
+            foreach (var b in Bullets)
+            {
+                b.Update(gameTime);
+            }
+
+
+            // Cleanup bullets that are inactive
             for (int i = Bullets.Count - 1; i >= 0; i--)
             {
                 if (!Bullets[i].IsActive)
-                {
                     Bullets.RemoveAt(i);
-                }
             }
         }
-
-
     }
 }

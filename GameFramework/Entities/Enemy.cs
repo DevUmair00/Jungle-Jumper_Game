@@ -68,11 +68,9 @@ namespace GameFrameWork.Entities
             // Bullet hits enemy
             if (other is Bullet)
             {
-                Health--;
                 other.IsActive = false;
 
-                if (Health <= 0)
-                    IsActive = false;
+                IsActive = false;
             }
 
 

@@ -22,6 +22,8 @@ namespace GameFrameWork.Core
         private GameFrameWork.System.PhysicsSystem physics = new GameFrameWork.System.PhysicsSystem();
         private GameFrameWork.System.CollisionSystem collision = new GameFrameWork.System.CollisionSystem();
 
+
+
         /// Add a game object to the scene.
         /// Encapsulation: Game manages the collection so external code doesn't manipulate the list directly.
         public void AddObject(GameObject obj)
@@ -29,18 +31,6 @@ namespace GameFrameWork.Core
             objects.Add(obj);
         }
 
-        /// Update all active objects. The Game is responsible for iterating objects and orchestrating the update sequence.
-        /// This separation of concerns keeps the game loop logic central and simple.
-
-
-
-        //public void Update(GameTime gameTime)
-        //{
-        //    foreach (var obj in objects.Where(o => o.IsActive))
-        //    {
-        //        obj.Update(gameTime);
-        //    }
-        //}
 
         public void Update(GameTime gameTime)
         {

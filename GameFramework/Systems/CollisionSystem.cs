@@ -33,14 +33,13 @@ namespace GameFrameWork.System
                         var a = (GameObject)collidables[i];
                         var b = (GameObject)collidables[j];
 
-                        if(a.Name == "Coin" && b is Enemy) return;
+                        if (a.Name == "Coin" && b is Enemy) continue;
+                        if (b.Name == "Coin" && a is Enemy) continue;
 
-                        if (b.Name == "Coin" && a is Enemy) return;
+                        if (a.Name == "Key" && b is Enemy) continue;
+                        if (b.Name == "Key" && a is Enemy) continue;
 
-
-                        if(a.Name == "Key" && b is Enemy) return;
-
-                        if (b.Name == "Key" && a is Enemy) return;
+                       
                             
                         // Compute the intersection rectangle (axis-aligned overlap)
                         var overlap = RectangleF.Intersect(a.Bounds, b.Bounds);

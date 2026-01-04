@@ -58,7 +58,7 @@ namespace JungleEscapeGame
             GameState.LevelCompleted = false;
         }
 
-        
+
         protected override void OnPaint(PaintEventArgs e)
         {
             if (player == null) return;
@@ -71,7 +71,6 @@ namespace JungleEscapeGame
             game.Draw(g);
             g.ResetTransform();
 
-            //DrawHUD(g);
             DrawScore(g);
             DrawKey(g);
             DrawHealthBar(g);
@@ -83,7 +82,7 @@ namespace JungleEscapeGame
 
             // Position and Size of the Health Bar
             int x = 20;
-            int y = 60; 
+            int y = 60;
             int width = 200;
             int height = 20;
 
@@ -174,13 +173,12 @@ namespace JungleEscapeGame
                 LoadLevel();
             }
 
-            if (Keyboard.IsKeyPressed(Key.Space))
-            {
-                Bullet bullet = player.Fire();
 
-                if (bullet != null)
-                    game.AddObject(bullet);
-            }
+
+
+
+            // Update bullets (spawn, move, remove)
+            level.UpdateBullets(new GameTime(deltaTime), game);
 
             game.Update(new GameTime(deltaTime));
             physics.Apply(game.Objects);
