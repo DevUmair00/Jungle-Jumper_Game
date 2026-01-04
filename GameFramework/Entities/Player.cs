@@ -1,10 +1,7 @@
 ﻿using GameFrameWork.Core;
 using GameFrameWork.Entities;
 using GameFrameWork.Extentions;
-using GameFrameWork.Interfaces;
 using GameFrameWork.Movements;
-using EZInput;
-using System.Drawing;
 
 public class Player : GameObject
 {
@@ -73,7 +70,7 @@ public class Player : GameObject
             {
                 Health = MaxHealth;
                 Game.Audio.Play("hit");
-                this.Position = new PointF(30f , this.Position.Y);
+                this.Position = new PointF(30f, this.Position.Y);
             }
             else
             {
@@ -114,7 +111,7 @@ public class Player : GameObject
             Game.Audio.StopAll();
         }
     }
-        
+
 
 
     private void ResolveGroundCollision(GameObject other)

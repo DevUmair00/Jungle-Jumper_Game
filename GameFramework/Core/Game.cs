@@ -1,13 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
+﻿using GameFrameWork.Component;
 using GameFrameWork.Entities;
-using GameFrameWork.Component;
-using GameFrameWork.Core;
-using GameFrameWork.Extentions;
 using GameFrameWork.Interfaces;
-using GameFrameWork.Movements;
-using GameFrameWork.System;
 
 
 namespace GameFrameWork.Core
@@ -102,4 +95,4 @@ namespace GameFrameWork.Core
             objects.RemoveAll(o => !o.IsActive);
         }
     }
-}                           
+}

@@ -1,15 +1,11 @@
-﻿using DocumentFormat.OpenXml.Drawing;
-using DocumentFormat.OpenXml.Spreadsheet;
-using DocumentFormat.OpenXml.Wordprocessing;
-using GameFrameWork.Core;
+﻿using GameFrameWork.Core;
 using GameFrameWork.Entities;
 using GameFrameWork.Extentions;
 using GameFrameWork.Movements;
-using System.Drawing;
 
 namespace JungleEscapeGame.Levels
 {
-    public class Level1
+    public class Level1 : ILevel
     {
         public Player Player { get; private set; }
         public Enemy Enemy { get; private set; }
@@ -62,6 +58,16 @@ namespace JungleEscapeGame.Levels
                 HasPhysics = true
             });
 
+            Enemies.Add(new Enemy
+            {
+                Name = "Enemy",
+                Sprite = Properties.Resources.enemy1,
+                Position = new PointF(1465, groundY - 60),
+                Movement = new PatrolMovement(0, 2500),
+                Size = new SizeF(80, 60),
+                HasPhysics = true
+            });
+
             foreach (var e in Enemies)
                 game.AddObject(e);
 
@@ -71,7 +77,7 @@ namespace JungleEscapeGame.Levels
 
 
             // ================= FLOOR =================
-            
+
             game.AddObject(new GameObject
             {
                 Name = "Floor",
@@ -233,7 +239,7 @@ namespace JungleEscapeGame.Levels
                 Size = new SizeF(64, 64),
                 Sprite = Properties.Resources.largeBox,
                 IsRigidBody = true,
-                
+
             });
             game.AddObject(new GameObject
             {
@@ -256,15 +262,15 @@ namespace JungleEscapeGame.Levels
             // ================= Key  =================
 
 
-                game.AddObject(new GameObject
-                {
-                    Name = "Key", // This is the secret! Use a Name or Tag property
-                    Position = new PointF(1600, groundY - 100),
-                    Size = new SizeF(35, 35),
-                    Sprite = Properties.Resources.key,
-                    IsRigidBody = false, // Set to false so the player can walk through it
-                    HasPhysics = false
-                });
+            game.AddObject(new GameObject
+            {
+                Name = "Key", // This is the secret! Use a Name or Tag property
+                Position = new PointF(1600, groundY - 100),
+                Size = new SizeF(35, 35),
+                Sprite = Properties.Resources.key,
+                IsRigidBody = false, // Set to false so the player can walk through it
+                HasPhysics = false
+            });
 
 
             // ================= COINS (Soul Shards) =================
@@ -275,12 +281,12 @@ namespace JungleEscapeGame.Levels
                 game.AddObject(new GameObject
                 {
                     Name = "Coin", // Tag property
-                    Position = new PointF(400+(i*80), groundY - 50),
+                    Position = new PointF(400 + (i * 80), groundY - 50),
                     Size = new SizeF(20, 20),
                     Sprite = Properties.Resources.coin,
                     IsRigidBody = false, // Set to false so the player can walk through it
                     HasPhysics = false,
-                    
+
                 });
             }
 
@@ -290,7 +296,7 @@ namespace JungleEscapeGame.Levels
                 game.AddObject(new GameObject
                 {
                     Name = "Coin", // This is the secret! Use a Name or Tag property
-                    Position = new PointF(1250+(i*80), groundY - 35),
+                    Position = new PointF(1250 + (i * 80), groundY - 35),
                     Size = new SizeF(20, 20),
                     Sprite = Properties.Resources.coin,
                     IsRigidBody = false, // Set to false so the player can walk through it
@@ -308,6 +314,8 @@ namespace JungleEscapeGame.Levels
                 Sprite = Properties.Resources.exit,
                 IsRigidBody = true
             });
+
+            Game.Audio.Play("level1_music");
         }
 
 
@@ -338,5 +346,6 @@ namespace JungleEscapeGame.Levels
                     Bullets.RemoveAt(i);
             }
         }
+
     }
 }

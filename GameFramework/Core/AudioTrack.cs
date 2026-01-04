@@ -1,24 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using GameFrameWork.Entities;
-using GameFrameWork.Component;
-using GameFrameWork.Core;
-using GameFrameWork.Extentions;
-using GameFrameWork.Interfaces;
-using GameFrameWork.Movements;
-using GameFrameWork.System;
-using NAudio.Wave;
-using System.IO;
+﻿using NAudio.Wave;
 
 namespace GameFrameWork.Core
 {
     public class AudioTrack
     {
         public string Name { get; set; } = null!;
-        public string FilePath { get; set; }=null!;
+        public string FilePath { get; set; } = null!;
         public float Volume { get; set; }
-        public bool Loop { get; set; } 
+        public bool Loop { get; set; }
         public float Duration { get; set; }
 
 
@@ -28,7 +17,7 @@ namespace GameFrameWork.Core
         private AudioFileReader? reader;
 
 
-        public AudioTrack(string name, string filePath,bool loop)
+        public AudioTrack(string name, string filePath, bool loop)
         {
             Name = name;
             FilePath = filePath;

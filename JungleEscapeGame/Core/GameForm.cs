@@ -1,13 +1,7 @@
-﻿using EZInput;
-using GameFrameWork.Core;
-using GameFrameWork.Component;
-using GameFrameWork.Entities;
-using GameFrameWork.Extentions;
+﻿using GameFrameWork.Core;
 using GameFrameWork.System;
+using JungleEscapeGame.Core;
 using JungleEscapeGame.Levels;
-using System;
-using System.Drawing;
-using System.Windows.Forms;
 
 namespace JungleEscapeGame
 {
@@ -25,7 +19,7 @@ namespace JungleEscapeGame
         private PhysicsSystem physics = new PhysicsSystem();
         private CollisionSystem collisions = new CollisionSystem();
 
-        private Level1 level;
+        private ILevel level;
         private Player player;
 
         public int MaxHealth { get; set; } = 100;
@@ -41,21 +35,34 @@ namespace JungleEscapeGame
 
         int currentLevel = 1;
 
-        public GameForm()
+        public GameForm(int StartLevel)
         {
             InitializeComponent();
             DoubleBuffered = true;
             ClientSize = new Size(800, 500);
 
+            this.currentLevel = 2; // Set the level from the menu
             LoadLevel();
         }
 
         void LoadLevel()
         {
+            game.Objects.Clear();
 
-            level = new Level1();
-            level.Load(game);
-            player = level.Player;
+            if (currentLevel == 1)
+            {
+                level = new Level1();
+            }
+            else if (currentLevel == 2)
+            {
+                level = new Level2();
+            }
+
+            if (level != null)
+            {
+                level.Load(game);
+                player = level.Player;
+            }
 
             GameState.LevelCompleted = false;
         }
@@ -164,33 +171,34 @@ namespace JungleEscapeGame
             if (player.Lives <= 0) // Check lives instead of IsActive
             {
                 GameState.GameOver = true;
-                // Don't use MessageBox here, it breaks the game loop
                 return;
             }
 
-
             if (GameState.LevelCompleted)
             {
-                currentLevel++;
+                //currentLevel++;
                 LoadLevel();
             }
 
 
-
-
-
             // Update bullets (spawn, move, remove)
-            level.UpdateBullets(new GameTime(deltaTime), game);
+            level?.UpdateBullets(new GameTime(deltaTime), game);
 
             game.Update(new GameTime(deltaTime));
             physics.Apply(game.Objects);
             collisions.Check(game.Objects);
             game.Cleanup();
 
-            cameraOffset = new PointF(
-                Math.Max(0, Math.Min(player.Position.X - ClientSize.Width / 2, worldWidth - ClientSize.Width)),
-                0
-            );
+            cameraOffset = new PointF(Math.Max(0, Math.Min(player.Position.X - ClientSize.Width / 2, worldWidth - ClientSize.Width)), 0);
+
+
+            if (GameState.LevelCompleted)
+            {
+                currentLevel++;
+                SaveSystem.SaveLevel(currentLevel); // Save progress to the file
+                LoadLevel();
+            }
+
 
             Invalidate();
         }

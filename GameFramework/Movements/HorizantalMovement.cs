@@ -1,23 +1,16 @@
-﻿using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
+﻿using GameFrameWork.Core;
 using GameFrameWork.Entities;
-using GameFrameWork.Component;
-using GameFrameWork.Core;
-using GameFrameWork.Extentions;
 using GameFrameWork.Interfaces;
-using GameFrameWork.Movements;
-using GameFrameWork.System;
 
 
 namespace GameFrameWork.Movements
 {
-    public class HorizantalMovement: IMovement
+    public class HorizantalMovement : IMovement
     {
         private float leftBound;
         private float rightBound;
         private float speed;
-        public HorizantalMovement(float  leftBound, float rightBound, float speed)
+        public HorizantalMovement(float leftBound, float rightBound, float speed)
         {
             this.leftBound = leftBound;
             this.rightBound = rightBound;

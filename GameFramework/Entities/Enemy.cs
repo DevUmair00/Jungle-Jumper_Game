@@ -1,13 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using GameFrameWork.Entities;
-using GameFrameWork.Component;
-using GameFrameWork.Core;
+﻿using GameFrameWork.Core;
 using GameFrameWork.Extentions;
 using GameFrameWork.Interfaces;
 using GameFrameWork.Movements;
-using GameFrameWork.System;
 
 namespace GameFrameWork.Entities
 {
@@ -33,7 +27,7 @@ namespace GameFrameWork.Entities
         {
             this.Sprite = sprite;
             this.Position = startPos;
-            this.Movement = new HorizantalMovement(600,300, speed);
+            this.Movement = new HorizantalMovement(600, 300, speed);
             this.Size = new Size(sprite.Width, sprite.Height);
         }
 

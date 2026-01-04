@@ -1,7 +1,6 @@
 ﻿using GameFrameWork.Core;
 using GameFrameWork.Entities;
 using GameFrameWork.Interfaces;
-using System.Drawing;
 
 namespace GameFrameWork.Movements
 {

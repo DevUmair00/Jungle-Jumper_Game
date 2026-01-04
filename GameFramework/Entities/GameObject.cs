@@ -1,18 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using GameFrameWork.Entities;
-using GameFrameWork.Component;
-using GameFrameWork.Core;
+﻿using GameFrameWork.Core;
 using GameFrameWork.Extentions;
 using GameFrameWork.Interfaces;
-using GameFrameWork.Movements;
-using GameFrameWork.System;
 
 
 namespace GameFrameWork.Entities
 {
-    public class GameObject : IDrawable, IUpdatable, IMovable,ICollidable, IPhysicsObject
+    public class GameObject : IDrawable, IUpdatable, IMovable, ICollidable, IPhysicsObject
     {
         // Position of the object in the game world (encapsulated state)
         public PointF Position { get; set; }
@@ -38,7 +31,7 @@ namespace GameFrameWork.Entities
         // Size of the object (width and height)
         // Used to compute the bounding box for collision detection (single responsibility: size responsibility)
         public SizeF Size { get; set; }
-            
+
         // Velocity of the object (speed and direction)
         // Part of the IMovable contract and used by physics systems to update positions
         public PointF Velocity { get; set; } = PointF.Empty;
@@ -101,7 +94,7 @@ namespace GameFrameWork.Entities
         // Demonstrates polymorphism and single responsibility: collision reaction is left to the object itself.
         public virtual void OnCollision(GameObject other)
         {
-            if(other is Bullet)
+            if (other is Bullet)
             {
                 other.IsActive = false; // Deactivate this object on collision with a Bullet
             }

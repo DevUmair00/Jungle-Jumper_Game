@@ -1,21 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using GameFrameWork.Entities;
-using GameFrameWork.Component;
-using GameFrameWork.Core;
-using GameFrameWork.Extentions;
+﻿using GameFrameWork.Core;
 using GameFrameWork.Interfaces;
-using GameFrameWork.Movements;
-using GameFrameWork.System;
 using NAudio.Wave;
 
 namespace GameFrameWork.Component
 {
-    public class Audio:IAudio
+    public class Audio : IAudio
     {
         //sound data object
-        private Dictionary<string,AudioTrack> sounds= new Dictionary<string, AudioTrack>();
+        private Dictionary<string, AudioTrack> sounds = new Dictionary<string, AudioTrack>();
 
         //playing devices like Speaker
         private Dictionary<string, WaveOutEvent> outputs = new();

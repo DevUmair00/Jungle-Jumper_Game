@@ -1,14 +1,7 @@
 ﻿using EZInput;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using GameFrameWork.Entities;
-using GameFrameWork.Component;
 using GameFrameWork.Core;
-using GameFrameWork.Extentions;
+using GameFrameWork.Entities;
 using GameFrameWork.Interfaces;
-using GameFrameWork.Movements;
-using GameFrameWork.System;
 
 namespace GameFrameWork.Movements
 {
@@ -39,7 +32,7 @@ namespace GameFrameWork.Movements
             //}
 
             if (Keyboard.IsKeyPressed(Key.RightArrow))
-            { 
+            {
                 obj.HasPhysics = true;
                 obj.Position = new PointF(obj.Position.X + Speed, obj.Position.Y);
             }

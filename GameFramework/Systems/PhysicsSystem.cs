@@ -1,13 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using GameFrameWork.Entities;
-using GameFrameWork.Component;
-using GameFrameWork.Core;
-using GameFrameWork.Extentions;
+﻿using GameFrameWork.Entities;
 using GameFrameWork.Interfaces;
-using GameFrameWork.Movements;
-using GameFrameWork.System;
 
 namespace GameFrameWork.System
 {
@@ -23,24 +15,24 @@ namespace GameFrameWork.System
             {
                 if (obj is IMovable movable)
                 {
-                        // Use the object custom gravity if set, otherwise use the global gravity
-                        float appliedGravity = obj.CustomGravity ?? Gravity;
+                    // Use the object custom gravity if set, otherwise use the global gravity
+                    float appliedGravity = obj.CustomGravity ?? Gravity;
 
-                        // Update the velocity of the object by applying gravity.
-                        // Note: This is simple Euler integration and illustrates the physics update responsibility.
-                        movable.Velocity = new PointF(
-                            movable.Velocity.X, // Horizontal velocity remains unchanged
-                            movable.Velocity.Y + appliedGravity // Vertical velocity changes based on gravity
+                    // Update the velocity of the object by applying gravity.
+                    // Note: This is simple Euler integration and illustrates the physics update responsibility.
+                    movable.Velocity = new PointF(
+                        movable.Velocity.X, // Horizontal velocity remains unchanged
+                        movable.Velocity.Y + appliedGravity // Vertical velocity changes based on gravity
+                    );
+
+                    if (obj is GameObject gameObject)
+                    {
+                        // Update the position of the object based on its (now-updated) velocity
+                        gameObject.Position = new PointF(
+                            gameObject.Position.X + movable.Velocity.X,
+                            gameObject.Position.Y + movable.Velocity.Y
                         );
-
-                        if (obj is GameObject gameObject)
-                        {
-                            // Update the position of the object based on its (now-updated) velocity
-                            gameObject.Position = new PointF(
-                                gameObject.Position.X + movable.Velocity.X,
-                                gameObject.Position.Y + movable.Velocity.Y
-                            );
-                        }
+                    }
                 }
             }
 

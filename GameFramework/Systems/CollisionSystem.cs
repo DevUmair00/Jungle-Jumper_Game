@@ -1,13 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using GameFrameWork.Entities;
-using GameFrameWork.Component;
-using GameFrameWork.Core;
-using GameFrameWork.Extentions;
+﻿using GameFrameWork.Entities;
 using GameFrameWork.Interfaces;
-using GameFrameWork.Movements;
-using GameFrameWork.System;
 
 namespace GameFrameWork.System
 {
@@ -39,8 +31,8 @@ namespace GameFrameWork.System
                         if (a.Name == "Key" && b is Enemy) continue;
                         if (b.Name == "Key" && a is Enemy) continue;
 
-                       
-                            
+
+
                         // Compute the intersection rectangle (axis-aligned overlap)
                         var overlap = RectangleF.Intersect(a.Bounds, b.Bounds);
                         if (overlap.Width > 0 && overlap.Height > 0)

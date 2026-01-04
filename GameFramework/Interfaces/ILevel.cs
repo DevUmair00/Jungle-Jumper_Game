@@ -1,15 +1,11 @@
 ﻿using GameFrameWork.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace GameFramework.Interfaces
+namespace JungleEscapeGame.Levels
 {
     public interface ILevel
     {
+        Player Player { get; }
         void Load(Game game);
+        void UpdateBullets(GameTime gameTime, Game game);
     }
-
 }

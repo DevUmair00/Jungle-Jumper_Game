@@ -1,21 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using GameFrameWork.Entities;
-using GameFrameWork.Component;
-using GameFrameWork.Core;
-using GameFrameWork.Extentions;
-using GameFrameWork.Interfaces;
-using GameFrameWork.Movements;
-using GameFrameWork.System;
+﻿using GameFrameWork.Entities;
 
 namespace GameFrameWork.Interfaces
 {
-  public interface IAnimator
+    public interface IAnimator
     {
         GameObject Owner { get; set; }
 
- 
+
 
         void Update(float deltaTime);
 

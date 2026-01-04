@@ -22,7 +22,7 @@ namespace JungleEscapeGame.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources {
+    public class Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace JungleEscapeGame.Properties {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("JungleEscapeGame.Properties.Resources", typeof(Resources).Assembly);
@@ -51,7 +51,7 @@ namespace JungleEscapeGame.Properties {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace JungleEscapeGame.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap bg1 {
+        public static System.Drawing.Bitmap bg1 {
             get {
                 object obj = ResourceManager.GetObject("bg1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -73,7 +73,17 @@ namespace JungleEscapeGame.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap coin {
+        public static System.Drawing.Bitmap bgMenu {
+            get {
+                object obj = ResourceManager.GetObject("bgMenu", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap coin {
             get {
                 object obj = ResourceManager.GetObject("coin", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -81,18 +91,9 @@ namespace JungleEscapeGame.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
-        /// </summary>
-        internal static System.IO.UnmanagedMemoryStream coinPickup {
-            get {
-                return ResourceManager.GetStream("coinPickup", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap enemy1 {
+        public static System.Drawing.Bitmap enemy1 {
             get {
                 object obj = ResourceManager.GetObject("enemy1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -102,7 +103,7 @@ namespace JungleEscapeGame.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap enemy2 {
+        public static System.Drawing.Bitmap enemy2 {
             get {
                 object obj = ResourceManager.GetObject("enemy2", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -112,7 +113,7 @@ namespace JungleEscapeGame.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap enemy3 {
+        public static System.Drawing.Bitmap enemy3 {
             get {
                 object obj = ResourceManager.GetObject("enemy3", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -122,7 +123,7 @@ namespace JungleEscapeGame.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap exit {
+        public static System.Drawing.Bitmap exit {
             get {
                 object obj = ResourceManager.GetObject("exit", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -132,7 +133,7 @@ namespace JungleEscapeGame.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap hash {
+        public static System.Drawing.Bitmap hash {
             get {
                 object obj = ResourceManager.GetObject("hash", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -142,7 +143,7 @@ namespace JungleEscapeGame.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap hollowHash {
+        public static System.Drawing.Bitmap hollowHash {
             get {
                 object obj = ResourceManager.GetObject("hollowHash", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -152,7 +153,7 @@ namespace JungleEscapeGame.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap horizontalBrick {
+        public static System.Drawing.Bitmap horizontalBrick {
             get {
                 object obj = ResourceManager.GetObject("horizontalBrick", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -162,7 +163,7 @@ namespace JungleEscapeGame.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap iregular2 {
+        public static System.Drawing.Bitmap iregular2 {
             get {
                 object obj = ResourceManager.GetObject("iregular2", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -172,7 +173,7 @@ namespace JungleEscapeGame.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap irregular1 {
+        public static System.Drawing.Bitmap irregular1 {
             get {
                 object obj = ResourceManager.GetObject("irregular1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -182,7 +183,7 @@ namespace JungleEscapeGame.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap key {
+        public static System.Drawing.Bitmap key {
             get {
                 object obj = ResourceManager.GetObject("key", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -192,7 +193,7 @@ namespace JungleEscapeGame.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap largeBox {
+        public static System.Drawing.Bitmap largeBox {
             get {
                 object obj = ResourceManager.GetObject("largeBox", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -202,7 +203,7 @@ namespace JungleEscapeGame.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap mediumBox {
+        public static System.Drawing.Bitmap mediumBox {
             get {
                 object obj = ResourceManager.GetObject("mediumBox", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -210,18 +211,9 @@ namespace JungleEscapeGame.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
-        /// </summary>
-        internal static System.IO.UnmanagedMemoryStream menu_Music {
-            get {
-                return ResourceManager.GetStream("menu_Music", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap player {
+        public static System.Drawing.Bitmap player {
             get {
                 object obj = ResourceManager.GetObject("player", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -231,7 +223,7 @@ namespace JungleEscapeGame.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap plus {
+        public static System.Drawing.Bitmap plus {
             get {
                 object obj = ResourceManager.GetObject("plus", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -241,7 +233,7 @@ namespace JungleEscapeGame.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap smallBox {
+        public static System.Drawing.Bitmap smallBox {
             get {
                 object obj = ResourceManager.GetObject("smallBox", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -251,7 +243,7 @@ namespace JungleEscapeGame.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap verticalBrick {
+        public static System.Drawing.Bitmap verticalBrick {
             get {
                 object obj = ResourceManager.GetObject("verticalBrick", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
