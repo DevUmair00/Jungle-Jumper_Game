@@ -41,7 +41,7 @@ namespace GameFrameWork.System
                         if(a.Name == "Key" && b is Enemy) return;
 
                         if (b.Name == "Key" && a is Enemy) return;
-
+                            
                         // Compute the intersection rectangle (axis-aligned overlap)
                         var overlap = RectangleF.Intersect(a.Bounds, b.Bounds);
                         if (overlap.Width > 0 && overlap.Height > 0)
@@ -118,13 +118,14 @@ namespace GameFrameWork.System
                                 }
                             }
 
+
                             // If any object is rigid, ensure it is stopped and physics disabled so gravity won't affect it further.
-                            if (a.IsRigidBody)
+                            if (a.IsRigidBody && !(a is Enemy))
                             {
                                 a.Velocity = PointF.Empty;
                                 a.HasPhysics = false;
                             }
-                            if (b.IsRigidBody)
+                            if (b.IsRigidBody && !(b is Enemy))
                             {
                                 b.Velocity = PointF.Empty;
                                 b.HasPhysics = false;

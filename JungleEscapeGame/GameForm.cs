@@ -10,21 +10,34 @@ using System.Windows.Forms;
 
 namespace JungleEscapeGame
 {
+    public static class GameState
+    {
+        public static bool LevelCompleted = false;
+        public static bool GameOver = false;
+
+    }
+
     public partial class GameForm : Form
     {
         private Game game = new Game();
-
         private PhysicsSystem physics = new PhysicsSystem();
         private CollisionSystem collisions = new CollisionSystem();
 
         private Level1 level;
-        private Player player; // This is the player we will use for EVERYTHING
+        private Player player;
+
+        public int MaxHealth { get; set; } = 100;
+        public int Health { get; set; } = 100;
+        public int Score { get; set; } = 0;
+
 
         private PointF cameraOffset = PointF.Empty;
+
         private float deltaTime = 0.016f;
 
         float worldWidth = 2500f;
-        float worldHeight = 500f;
+
+        int currentLevel = 1;
 
         public GameForm()
         {
@@ -32,78 +45,139 @@ namespace JungleEscapeGame
             DoubleBuffered = true;
             ClientSize = new Size(800, 500);
 
-            level = new Level1();
-            level.Load(game);
-            player = level.Player; // Assigning the real player from Level 1
+            LoadLevel();
         }
 
+        void LoadLevel()
+        {
+
+            level = new Level1();
+            level.Load(game);
+            player = level.Player;
+
+            GameState.LevelCompleted = false;
+        }
+
+        
         protected override void OnPaint(PaintEventArgs e)
         {
-            // FIX: Use == for comparison, not =
-            if (this.Visible && game != null)
+            if (player == null) return;
+
+            Graphics g = e.Graphics;
+
+            DrawBackground(g);
+
+            g.TranslateTransform(-cameraOffset.X, 0);
+            game.Draw(g);
+            g.ResetTransform();
+
+            //DrawHUD(g);
+            DrawScore(g);
+            DrawKey(g);
+            DrawHealthBar(g);
+        }
+
+        private void DrawHealthBar(Graphics g)
+        {
+            if (player == null) return;
+
+            // Position and Size of the Health Bar
+            int x = 20;
+            int y = 60; 
+            int width = 200;
+            int height = 20;
+
+            //Draw the Background (The empty slot)
+            g.FillRectangle(Brushes.Gray, x, y, width, height);
+
+            //Current health percentage
+            float healthPercentage = (float)player.Health / player.MaxHealth;
+            float currentHealthWidth = width * healthPercentage;
+
+            //Choose color based on level theme
+            Brush healthBrush = (level is Level1) ? Brushes.LimeGreen : Brushes.DarkViolet;
+
+            //Draw the actual Health
+            g.FillRectangle(healthBrush, x, y, currentHealthWidth, height);
+
+            g.DrawRectangle(Pens.Black, x, y, width, height);
+
+            g.DrawString("HP", new Font("Arial", 10, FontStyle.Bold), Brushes.White, x + 5, y + 2);
+
+
+
+            Font lifeFont = new Font("Arial", 12, FontStyle.Bold);
+            string lifeText = "LIVES: ";
+            g.DrawString(lifeText, lifeFont, Brushes.White, 20, 90);
+
+            for (int i = 0; i < player.Lives; i++)
             {
-                Graphics g = e.Graphics;
+                g.FillEllipse(Brushes.Red, 80 + (i * 25), 90, 15, 15);
+            }
 
-                // 1. Draw Background (Stationary or Parallax)
-                DrawBackground(g);
-
-                // 2. Apply Camera for Game Objects
-                g.TranslateTransform(-cameraOffset.X, 0);
-                game.Draw(g);
-                g.ResetTransform();
-
-                // 3. Draw UI (Always stationary on screen)
-                DrawScore(g);
-
-                DrawKey(g);
+            if (player.Lives <= 0)
+            {
+                DrawGameOver(g);
             }
         }
 
-        // Moved UI logic to a dedicated helper to keep code clean
+
+        private void DrawGameOver(Graphics g)
+        {
+            Rectangle screenRect = new Rectangle(0, 0, this.Width, this.Height);
+            g.FillRectangle(new SolidBrush(Color.FromArgb(150, 0, 0, 0)), screenRect); // Darken screen
+
+            Font bigFont = new Font("Impact", 50);
+            string msg = "GAME OVER";
+            SizeF size = g.MeasureString(msg, bigFont);
+            g.DrawString(msg, bigFont, Brushes.Red, (this.Width - size.Width) / 2, (this.Height - size.Height) / 2);
+        }
+
+
         private void DrawScore(Graphics g)
         {
-
-            if (player == null) return;
-
-            Font scoreFont = new Font("Impact", 20, FontStyle.Regular);
-
-            Brush scoreBrush = Brushes.LimeGreen;
-            PointF textPosition = new PointF(20, 20);
-
-            string displayString = $"Score : {player.Score}";
-
-            g.DrawString(displayString, scoreFont, Brushes.DarkGreen, textPosition.X + 2, textPosition.Y + 2);
-            g.DrawString(displayString, scoreFont, scoreBrush, textPosition.X, textPosition.Y);
+            g.DrawString($"Score: {player.Score}",
+                new Font("Impact", 18), Brushes.LimeGreen, 20, 20);
         }
 
         private void DrawKey(Graphics g)
         {
-
-            if (player == null) return;
-
-            Font keyFont = new Font("Impact", 20, FontStyle.Regular);
-
-            Brush keyBrush = Brushes.LimeGreen;
-            PointF textPosition = new PointF(700, 20);
-
-            string displayString = $"Key : {player.Key}";
-
-            g.DrawString(displayString, keyFont, Brushes.DarkGreen, textPosition.X + 2, textPosition.Y + 2);
-            g.DrawString(displayString, keyFont, keyBrush, textPosition.X, textPosition.Y);
+            g.DrawString($"Keys: {player.Keys}",
+                new Font("Impact", 18), Brushes.Gold, 650, 20);
         }
-
 
         private void DrawBackground(Graphics g)
         {
-            g.DrawImage(Properties.Resources.bg1, new Rectangle(0, 0, 800, 500));
+            g.DrawImage(Properties.Resources.bg1, 0, 0, 800, 500);
         }
 
         private void gameTimer_Tick(object sender, EventArgs e)
         {
-            // FIRE BULLET
-            if (EZInput.Keyboard.IsKeyPressed(Key.Space))
+            // If the game is over, stop updating but keep drawing
+            if (GameState.GameOver)
             {
-                Bullet bullet = player?.Fire();
+                Invalidate(); // Keep drawing the Game Over screen
+                return;
+            }
+
+            if (player.Lives <= 0) // Check lives instead of IsActive
+            {
+                GameState.GameOver = true;
+                // Don't use MessageBox here, it breaks the game loop
+                return;
+            }
+
+
+            if (GameState.LevelCompleted)
+            {
+                currentLevel++;
+                LoadLevel();
+            }
+
+            if (Keyboard.IsKeyPressed(Key.Space))
+            {
+                Bullet bullet = player.Fire();
+
                 if (bullet != null)
                     game.AddObject(bullet);
             }
@@ -113,17 +187,12 @@ namespace JungleEscapeGame
             collisions.Check(game.Objects);
             game.Cleanup();
 
+            cameraOffset = new PointF(
+                Math.Max(0, Math.Min(player.Position.X - ClientSize.Width / 2, worldWidth - ClientSize.Width)),
+                0
+            );
 
-            // CAMERA FOLLOWS PLAYER
-            if (player != null)
-            {
-                cameraOffset = new PointF(
-                    Math.Max(0, Math.Min(player.Position.X - ClientSize.Width / 2, worldWidth - ClientSize.Width)),
-                    0 // Keep Y static for side-scrolling
-                );
-            }
-
-            Invalidate(); // Refresh the screen
+            Invalidate();
         }
     }
 }

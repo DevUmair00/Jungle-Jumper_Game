@@ -1,173 +1,127 @@
-﻿using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
+﻿using GameFrameWork.Core;
 using GameFrameWork.Entities;
-using GameFrameWork.Component;
-using System;
-using GameFrameWork.Core;
 using GameFrameWork.Extentions;
 using GameFrameWork.Interfaces;
 using GameFrameWork.Movements;
-using GameFrameWork.System;
-using System.Windows.Forms;    // Required for Form, PaintEventArgs, and Application
+using EZInput;
+using System.Drawing;
 
-namespace GameFrameWork.Entities
+public class Player : GameObject
 {
-    public class Player : GameObject
+
+    public int MaxHealth { get; set; } = 100;
+    public int Health { get; set; } = 100;
+    public int Lives { get; set; } = 3; // Start with 3 lives
+    public int Score { get; set; } = 0;
+
+    public int Keys { get; set; } = 0;
+    public bool ReachedExit { get; private set; }
+
+
+    private float fireCooldown = 0.3f;
+
+    private float fireTimer = 0f;
+
+
+
+
+    public override void Update(GameTime gameTime)
     {
-        // Movement strategy: demonstrates composition over inheritance.
-        // Different movement behaviors can be injected (KeyboardMovement, PatrolMovement, etc.).
-        public IMovement? Movement { get; set; }
+        fireTimer -= gameTime.DeltaTime;
 
-        public bool IsMoving { get; set; } = false;
-
-        // Domain state
-        public int Health { get; set; } = 100;
-        public int Score { get; set; } = 0;
-
-        public int Key { get; set; } = 0;
+        ApplyMovements(gameTime);
+        base.Update(gameTime);
+    }
 
 
+    // Inside Player.cs
+    public Bullet Fire()
+    {
+        // Check cooldown
+        if (fireTimer > 0)
+            return null;
 
-        private float fireCooldown = 0.3f;   // seconds
-        private float fireTimer = 0f;
+        fireTimer = fireCooldown;
 
-
-        public Player() { }
-
-        public Player(Image sprite , PointF startPos , float speed) 
+        // Create bullet at player's position
+        return new Bullet
         {
-           this.Sprite = sprite;
-           this.Position = startPos;
-           this.Movement = new KeyboardMovement(speed);
-           this.Size = new Size(sprite.Width, sprite.Height);
-        }
+            Name = "Bullet",
+            Position = new PointF(
+                Position.X + Size.Width, // Spawn at front of player
+                Position.Y + (Size.Height / 2) - 5 // Center vertically
+            ),
+            Size = new SizeF(15, 10),
+            HasPhysics = false // Bullets usually ignore gravity
+        };
+    }
 
 
-        /// Update the player: delegate movement to the Movement strategy (if provided) and then apply base update.
-        /// Shows the Strategy pattern (movement behavior varies independently from Player class).
-        /// 
-        public override void Update(GameTime gameTime)
+
+
+    public void TakeDamage(int amount)
+    {
+
+        Health -= amount;
+
+        if (Health <= 0)
         {
-            fireTimer -= gameTime.DeltaTime;
-
-            // Prefer the Movements collection (allows multiple movement behaviours).
-            if (Movements != null && Movements.Count > 0)
+            Lives--;
+            if (Lives > 0)
             {
-                ApplyMovements(gameTime);
+                Health = MaxHealth;
+                this.Position = new PointF(30f , this.Position.Y);
             }
             else
             {
-                // Fallback to single Movement property for backwards compatibility
-                Movement?.Move(this, gameTime);
-            }
-
-            base.Update(gameTime);
-        }
-
-        public Bullet Fire()
-        {
-            if (fireTimer > 0)
-                return null;
-
-            fireTimer = fireCooldown;
-
-            Bullet bullet = new Bullet
-            {
-                Position = new PointF(
-                    Position.X + Size.Width,
-                    Position.Y + Size.Height / 2 - 5
-                ),
-                Size = new SizeF(10, 5)
-            };
-
-            return bullet;
-        }
-
-
-
-        /// Draw uses base implementation; override if player needs custom visuals.
-
-        public override void Draw(Graphics g)
-        {
-            base.Draw(g);
-        }
-
-        public override void OnCollision(GameObject other)
-        {
-            if (other.IsRigidBody)
-            {
-                RectangleF p = Bounds;
-                RectangleF o = other.Bounds;
-
-                // Landing from top
-                if (p.Bottom >= o.Top && p.Top < o.Top)
-                {
-                    Position = new PointF(Position.X, o.Top - Size.Height);
-                    Velocity = new PointF(Velocity.X, 0);
-                    HasPhysics = false;
-
-                    // reset jump
-                    foreach (var m in Movements)
-                        if (m is JumpingMovement j)
-                            j.ResetJump();
-                }
-            }
-
-            if(other.Name == "Coin")
-            {
-                // 1. Add Score
-                this.Score += 10;
-
-                // 2. Play Sound (Requirement 5)
-                // SoundManager.Play("pickup.wav");
-
-                // 3. Deactivate or Remove the coin
-                other.IsActive = false; // This makes it disappear
-
-                if (Application.OpenForms.Count > 0)
-                {
-                    Application.OpenForms[0].Invalidate();
-                }
-            }
-
-            if(other.Name == "Key")
-            {
-                // 1. Add Score
-                this.Key++;
-
-                // 2. Play Sound (Requirement 5)
-                // SoundManager.Play("pickup.wav");
-
-                // 3. Deactivate or Remove the coin
-                other.IsActive = false; // This makes it disappear
-
-                if (Application.OpenForms.Count > 0)
-                {
-                    Application.OpenForms[0].Invalidate();
-                }
-            }
-
-            if(other.Name == "Exit")
-            {
-                // 1. Add Score
-                this.Key++;
-
-                // 2. Play Sound (Requirement 5)
-                // SoundManager.Play("pickup.wav");
-
-                // 3. Deactivate or Remove the coin
-                other.IsActive = false; // This makes it disappear
-
-                if (Application.OpenForms.Count > 0)
-                {
-                    Application.OpenForms[0].Invalidate();
-                }
+                Health = 0;
+                IsActive = false; // Game Over
             }
         }
-
-
-
     }
 
+
+
+
+    public override void OnCollision(GameObject other)
+    {
+        if (other.IsRigidBody)
+            ResolveGroundCollision(other);
+
+        if (other.Name == "Coin")
+        {
+            Score += 10;
+            other.IsActive = false;
+        }
+
+        if (other.Name == "Key")
+        {
+            Keys++;
+            other.IsActive = false;
+        }
+
+        if (other.Name == "Exit")
+        {
+            ReachedExit = true; // SIGNAL ONLY
+        }
+    }
+        
+
+
+    private void ResolveGroundCollision(GameObject other)
+    {
+        RectangleF p = Bounds;
+        RectangleF o = other.Bounds;
+
+        if (p.Bottom >= o.Top && p.Top < o.Top)
+        {
+            Position = new PointF(Position.X, o.Top - Size.Height);
+            Velocity = new PointF(Velocity.X, 0);
+            HasPhysics = false;
+
+            foreach (var m in Movements)
+                if (m is JumpingMovement j)
+                    j.ResetJump();
+        }
+    }
 }

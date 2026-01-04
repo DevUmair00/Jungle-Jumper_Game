@@ -1,14 +1,13 @@
-﻿using DocumentFormat.OpenXml.Drawing.Charts;
+﻿using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using GameFrameWork.Entities;
 using GameFrameWork.Component;
 using GameFrameWork.Core;
-using GameFrameWork.Entities;
 using GameFrameWork.Extentions;
 using GameFrameWork.Interfaces;
 using GameFrameWork.Movements;
 using GameFrameWork.System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
 
 namespace GameFrameWork.Entities
 {
@@ -20,6 +19,8 @@ namespace GameFrameWork.Entities
 
 
         public bool IsMoving { get; set; } = false;
+
+        public int Health = 3;
 
 
         // Default enemy velocity is set in constructor to give basic movement out-of-the-box.
@@ -61,37 +62,85 @@ namespace GameFrameWork.Entities
         }
 
 
-        /// On collision, enemy deactivates when hit by bullets (encapsulation of reaction logic inside the entity).
+
         public override void OnCollision(GameObject other)
         {
+            // Bullet hits enemy
             if (other is Bullet)
-            { 
-                IsActive = false;
-            }
-
-            if (other is Player)
-                other. IsActive = false;
-
-            if (other.IsRigidBody)
             {
-                Bitmap bmp = new Bitmap(this.Sprite);
-                bmp.RotateFlip(RotateFlipType.RotateNoneFlipX); // Flips horizontally
-                this.Sprite = bmp;
+                Health--;
+                other.IsActive = false;
+
+                if (Health <= 0)
+                    IsActive = false;
             }
 
-            // Ignore coins and keys completely
-            if (other.Name == "Coin" || other.Name == "Key")
+
+            // ========= Enemy ↔ Player =========
+            if (other is Player player)
+            {
+                player.TakeDamage(10);
+                ReverseDirection();
                 return;
+            }
+
+            // ========= Enemy ↔ Enemy =========
+            if (other is Enemy)
+            {
+                ReverseDirection();
+                return;
+            }
+
+            // ========= Enemy ↔ Floor =========
+            if (other.Name == "Floor")
+            {
+                ResolveGroundCollision(other);
+                return;
+            }
+
+            // ========= Enemy ↔ Wall / Box / Platform =========
+            if (other.Name == "Wall")
+            {
+                ReverseDirection();
+            }
+
+        }
+
+
+
+
+        private void ReverseDirection()
+        {
+            if (Movement is PatrolMovement patrol)
+                patrol.Reverse();
+
+            Velocity = new PointF(-Velocity.X, Velocity.Y);
+            FlipSprite();
+        }
+
+
+        private void ResolveGroundCollision(GameObject other)
+        {
+            RectangleF e = Bounds;
+            RectangleF o = other.Bounds;
+
+            if (e.Bottom >= o.Top && e.Top < o.Top)
+            {
+                Position = new PointF(Position.X, o.Top - Size.Height);
+                Velocity = new PointF(Velocity.X, 0);
+                HasPhysics = false;
+            }
         }
 
         private void FlipSprite()
         {
-            facingRight = !facingRight;
+            if (Sprite == null) return;
 
             Bitmap bmp = new Bitmap(Sprite);
             bmp.RotateFlip(RotateFlipType.RotateNoneFlipX);
             Sprite = bmp;
         }
+
 
     }
 }

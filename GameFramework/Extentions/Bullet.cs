@@ -40,8 +40,10 @@ namespace GameFrameWork.Extentions
         /// Keep collision reaction encapsulated in the object class.
         public override void OnCollision(GameObject other)
         {
-            if (other is Enemy)
-                IsActive = false;
+            if (other is Enemy || other.Name == "Wall")
+            {
+                this.IsActive = false;
+            }
         }
     }
 }

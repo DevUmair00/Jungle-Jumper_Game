@@ -59,6 +59,7 @@ namespace GameFrameWork.Core
                 }
             }
 
+
             // move physics-driven objects (gravity, velocity)
             physics.Apply(objects);
 

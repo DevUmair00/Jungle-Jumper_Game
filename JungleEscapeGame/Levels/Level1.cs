@@ -1,5 +1,9 @@
-﻿using GameFrameWork.Core;
+﻿using DocumentFormat.OpenXml.Drawing;
+using DocumentFormat.OpenXml.Spreadsheet;
+using DocumentFormat.OpenXml.Wordprocessing;
+using GameFrameWork.Core;
 using GameFrameWork.Entities;
+using GameFrameWork.Extentions;
 using GameFrameWork.Movements;
 using System.Drawing;
 
@@ -10,7 +14,11 @@ namespace JungleEscapeGame.Levels
         public Player Player { get; private set; }
         public Enemy Enemy { get; private set; }
 
-   
+        public List<Enemy> Enemies { get; } = new();
+
+        public List<Bullet> Bullets { get; } = new List<Bullet>();
+
+
         public void Load(Game game)
         {
             float worldWidth = 2500f;
@@ -22,53 +30,51 @@ namespace JungleEscapeGame.Levels
 
             Player = new Player
             {
-                Position = new PointF(100, groundY - 50),
+                Name = "Player",
+                Position = new PointF(100, groundY - 130),
                 Size = new SizeF(45, 50),
                 Sprite = Properties.Resources.player,
                 HasPhysics = true
             };
             Player.AddMovement(new KeyboardMovement(4));
-            Player.AddMovement(new JumpingMovement(12f));
+            Player.AddMovement(new JumpingMovement(16f));
             game.AddObject(Player);
 
             // ================= ENEMIES =================
 
-            Enemy = new Enemy
+            Enemies.Add(new Enemy
             {
+                Name = "Enemy",
                 Sprite = Properties.Resources.enemy1,
-                Position = new PointF(380, groundY - 60),
-                Movement = new PatrolMovement(380, 990),
+                Position = new PointF(305, groundY - 60),
+                Movement = new PatrolMovement(0, 2500),
                 Size = new SizeF(80, 60),
-                IsRigidBody = true,
                 HasPhysics = true
-            };
-            game.AddObject(Enemy);
+            });
+
+            Enemies.Add(new Enemy
+            {
+                Name = "Enemy",
+                Sprite = Properties.Resources.enemy1,
+                Position = new PointF(1265, groundY - 60),
+                Movement = new PatrolMovement(0, 2500),
+                Size = new SizeF(80, 60),
+                HasPhysics = true
+            });
+
+            foreach (var e in Enemies)
+                game.AddObject(e);
 
 
 
-            //game.AddObject(new Enemy
-            //{
-            //    Sprite = Properties.Resources.enemy2,
-            //    Position = new PointF(970, groundY - 60),
-            //    Size = new SizeF(80, 60),
-            //    HasPhysics = true,
-            //    IsRigidBody = true,
-            //    Movement = new PatrolMovement(970, 1600)
-            //});
 
-            //game.AddObject(new Enemy
-            //{
-            //    Sprite = Properties.Resources.enemy3,
-            //    Position = new PointF(1100, groundY - 60),
-            //    Size = new SizeF(80, 60),
-            //    HasPhysics = true,
-            //    IsRigidBody = true,
-            //    Movement = new PatrolMovement(1050, 1600)
-            //});
+
 
             // ================= FLOOR =================
+            
             game.AddObject(new GameObject
             {
+                Name = "Floor",
                 Position = new PointF(0, groundY),
                 Size = new SizeF(worldWidth, floorHeight),
                 Sprite = Properties.Resources.largeBox,
@@ -81,6 +87,7 @@ namespace JungleEscapeGame.Levels
 
             game.AddObject(new GameObject
             {
+                Name = "Wall",
                 Position = new PointF(0, 0),
                 Size = new SizeF(10, worldHeight),
                 IsRigidBody = true,
@@ -92,7 +99,8 @@ namespace JungleEscapeGame.Levels
 
             game.AddObject(new GameObject
             {
-                Position = new PointF(450, groundY - 170),
+                Name = "Wall",
+                Position = new PointF(440, groundY - 170),
                 Size = new SizeF(250, 100),
                 Sprite = Properties.Resources.horizontalBrick,
                 IsRigidBody = true
@@ -100,7 +108,8 @@ namespace JungleEscapeGame.Levels
 
             game.AddObject(new GameObject
             {
-                Position = new PointF(800, groundY - 170),
+                Name = "Wall",
+                Position = new PointF(760, groundY - 170),
                 Size = new SizeF(250, 100),
                 Sprite = Properties.Resources.horizontalBrick,
                 IsRigidBody = true
@@ -109,14 +118,16 @@ namespace JungleEscapeGame.Levels
 
             game.AddObject(new GameObject
             {
-                Position = new PointF(1370, groundY - 150),
+                Name = "Wall",
+                Position = new PointF(1370, groundY - 190),
                 Size = new SizeF(250, 100),
                 Sprite = Properties.Resources.plus,
                 IsRigidBody = true
             });
             game.AddObject(new GameObject
             {
-                Position = new PointF(1680, groundY - 150),
+                Name = "Wall",
+                Position = new PointF(1685, groundY - 190),
                 Size = new SizeF(250, 100),
                 Sprite = Properties.Resources.plus,
                 IsRigidBody = true
@@ -129,6 +140,7 @@ namespace JungleEscapeGame.Levels
 
             game.AddObject(new GameObject
             {
+                Name = "Wall",
                 Position = new PointF(226, groundY - 64),
                 Size = new SizeF(64, 64),
                 Sprite = Properties.Resources.largeBox,
@@ -136,6 +148,7 @@ namespace JungleEscapeGame.Levels
             });
             game.AddObject(new GameObject
             {
+                Name = "Wall",
                 Position = new PointF(300, groundY - 64),
                 Size = new SizeF(64, 64),
                 Sprite = Properties.Resources.largeBox,
@@ -143,6 +156,7 @@ namespace JungleEscapeGame.Levels
             });
             game.AddObject(new GameObject
             {
+                Name = "Wall",
                 Position = new PointF(300, groundY - 128),
                 Size = new SizeF(64, 64),
                 Sprite = Properties.Resources.largeBox,
@@ -151,31 +165,41 @@ namespace JungleEscapeGame.Levels
 
 
 
+
+
             game.AddObject(new GameObject
             {
-                Position = new PointF(1100, groundY - 64),
+                Name = "Wall",
+                Position = new PointF(1170, groundY - 64),
                 Size = new SizeF(64, 64),
                 Sprite = Properties.Resources.largeBox,
                 IsRigidBody = true
             });
             game.AddObject(new GameObject
             {
-                Position = new PointF(1164, groundY - 64),
+                Name = "Wall",
+                Position = new PointF(1234, groundY - 64),
                 Size = new SizeF(64, 64),
                 Sprite = Properties.Resources.largeBox,
                 IsRigidBody = true
             });
             game.AddObject(new GameObject
             {
-                Position = new PointF(1132, groundY - 128),
+                Name = "Wall",
+                Position = new PointF(1201, groundY - 128),
                 Size = new SizeF(64, 64),
                 Sprite = Properties.Resources.largeBox,
                 IsRigidBody = true
             });
 
 
+
+
+
+
             game.AddObject(new GameObject
             {
+                Name = "Wall",
                 Position = new PointF(2000, groundY - 64),
                 Size = new SizeF(64, 64),
                 Sprite = Properties.Resources.largeBox,
@@ -183,6 +207,7 @@ namespace JungleEscapeGame.Levels
             });
             game.AddObject(new GameObject
             {
+                Name = "Wall",
                 Position = new PointF(2064, groundY - 64),
                 Size = new SizeF(64, 64),
                 Sprite = Properties.Resources.largeBox,
@@ -190,22 +215,27 @@ namespace JungleEscapeGame.Levels
             });
             game.AddObject(new GameObject
             {
+                Name = "Wall",
                 Position = new PointF(2064, groundY - 128),
                 Size = new SizeF(64, 64),
                 Sprite = Properties.Resources.largeBox,
-                IsRigidBody = true
+                IsRigidBody = true,
+
             });
 
 
             game.AddObject(new GameObject
             {
+                Name = "Wall",
                 Position = new PointF(2128, groundY - 64),
                 Size = new SizeF(64, 64),
                 Sprite = Properties.Resources.largeBox,
-                IsRigidBody = true
+                IsRigidBody = true,
+                
             });
             game.AddObject(new GameObject
             {
+                Name = "Wall",
                 Position = new PointF(2128, groundY - 128),
                 Size = new SizeF(64, 64),
                 Sprite = Properties.Resources.largeBox,
@@ -213,6 +243,7 @@ namespace JungleEscapeGame.Levels
             });
             game.AddObject(new GameObject
             {
+                Name = "Wall",
                 Position = new PointF(2128, groundY - 192),
                 Size = new SizeF(64, 64),
                 Sprite = Properties.Resources.largeBox,
@@ -276,6 +307,30 @@ namespace JungleEscapeGame.Levels
                 IsRigidBody = true
             });
         }
+
+        public void UpdateBullets(GameTime gameTime, Game game)
+        {
+            // Handle Input and Spawning
+            if (EZInput.Keyboard.IsKeyPressed(EZInput.Key.Space)) // Assuming Space is Fire
+            {
+                var newBullet = Player.Fire();
+                if (newBullet != null)
+                {
+                    Bullets.Add(newBullet);
+                    game.AddObject(newBullet); // Add to general system for collision/drawing
+                }
+            }
+
+            // Cleanup: Remove inactive bullets from our local list
+            for (int i = Bullets.Count - 1; i >= 0; i--)
+            {
+                if (!Bullets[i].IsActive)
+                {
+                    Bullets.RemoveAt(i);
+                }
+            }
+        }
+
 
     }
 }

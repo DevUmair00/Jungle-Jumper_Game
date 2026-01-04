@@ -43,6 +43,14 @@ namespace GameFrameWork.System
                         }
                 }
             }
+
+            foreach (var obj in objects)
+            {
+                if (!obj.HasPhysics) continue;
+
+                float gravity = obj.CustomGravity ?? Gravity;
+                obj.Velocity = new PointF(obj.Velocity.X, obj.Velocity.Y + gravity);
+            }
         }
     }
 }

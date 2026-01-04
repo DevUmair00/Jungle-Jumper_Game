@@ -101,6 +101,11 @@ namespace GameFrameWork.Entities
         // Demonstrates polymorphism and single responsibility: collision reaction is left to the object itself.
         public virtual void OnCollision(GameObject other)
         {
+            if(other is Bullet)
+            {
+                other.IsActive = false; // Deactivate this object on collision with a Bullet
+            }
+
             // Default behavior: Do nothing
         }
     }

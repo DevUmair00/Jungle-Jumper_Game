@@ -1,13 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
+﻿using GameFrameWork.Core;
 using GameFrameWork.Entities;
-using GameFrameWork.Component;
-using GameFrameWork.Core;
-using GameFrameWork.Extentions;
 using GameFrameWork.Interfaces;
-using GameFrameWork.Movements;
-using GameFrameWork.System;
+using System.Drawing;
 
 namespace GameFrameWork.Movements
 {
@@ -15,29 +9,36 @@ namespace GameFrameWork.Movements
     {
         private float leftBound;
         private float rightBound;
-        private float speed = 2f;
+        private float speed;
+        private int direction = 1; // 1 = right, -1 = left
 
-        public PatrolMovement(float left, float right)
+        public PatrolMovement(float left, float right, float speed = 2f)
         {
             leftBound = left;
             rightBound = right;
+            this.speed = speed;
         }
 
         public void Move(GameObject obj, GameTime gameTime)
         {
-            obj.Position = new PointF(obj.Position.X + speed, obj.Position.Y);
+            obj.Velocity = new PointF(speed * direction, obj.Velocity.Y);
 
-            if (obj.Position.X < leftBound)
+            if (obj.Position.X <= leftBound)
             {
                 obj.Position = new PointF(leftBound, obj.Position.Y);
-                speed = Math.Abs(speed); // Move right
+                Reverse();
             }
-            else if (obj.Position.X > rightBound)
+            else if (obj.Position.X + obj.Size.Width >= rightBound)
             {
-                obj.Position = new PointF(rightBound, obj.Position.Y);
-                speed = -Math.Abs(speed); // Move left
+                obj.Position = new PointF(rightBound - obj.Size.Width, obj.Position.Y);
+                Reverse();
             }
         }
-    }
 
+
+        public void Reverse()
+        {
+            direction *= -1;
+        }
+    }
 }
