@@ -43,6 +43,8 @@ public class Player : GameObject
 
         fireTimer = fireCooldown;
 
+        Game.Audio.Play("shoot");
+
         // Create bullet at player's position
         return new Bullet
         {
@@ -70,12 +72,15 @@ public class Player : GameObject
             if (Lives > 0)
             {
                 Health = MaxHealth;
+                Game.Audio.Play("hit");
                 this.Position = new PointF(30f , this.Position.Y);
             }
             else
             {
                 Health = 0;
+                Game.Audio.Play("death");
                 IsActive = false; // Game Over
+                Game.Audio.StopAll();
             }
         }
     }
@@ -88,21 +93,25 @@ public class Player : GameObject
         if (other.IsRigidBody)
             ResolveGroundCollision(other);
 
+
         if (other.Name == "Coin")
         {
             Score += 10;
             other.IsActive = false;
+            Game.Audio.Play("coin");
         }
 
         if (other.Name == "Key")
         {
             Keys++;
             other.IsActive = false;
+            Game.Audio.Play("key");
         }
 
         if (other.Name == "Exit")
         {
             ReachedExit = true; // SIGNAL ONLY
+            Game.Audio.StopAll();
         }
     }
         

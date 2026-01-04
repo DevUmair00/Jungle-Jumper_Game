@@ -14,7 +14,6 @@ namespace GameFrameWork.Component
 {
     public class Audio:IAudio
     {
-        //sound data
         //sound data object
         private Dictionary<string,AudioTrack> sounds= new Dictionary<string, AudioTrack>();
 
@@ -23,29 +22,48 @@ namespace GameFrameWork.Component
         // File readers
         private Dictionary<string, AudioFileReader> readers = new();
 
+
         public void AddSound(AudioTrack sound)
         {
-            if(!sounds.ContainsKey(sound.Name))
-            {
+            if (!sounds.ContainsKey(sound.Name))
                 sounds.Add(sound.Name, sound);
-            }
         }
 
         public void Play(string name)
         {
-            if (sounds.TryGetValue(name, out var track))
+            if (!sounds.TryGetValue(name, out var track))
+                return;
+
+            // Create reader if not exists
+            if (!readers.ContainsKey(name))
+                readers[name] = new AudioFileReader(track.FilePath);
+
+            // Reset playback
+            readers[name].Position = 0;
+            readers[name].Volume = track.Volume;
+
+            // Create output if not exists
+            if (!outputs.ContainsKey(name))
             {
-                if (!readers.ContainsKey(name))
-                    readers[name] = new AudioFileReader(track.FilePath);
+                var output = new WaveOutEvent();
+                output.Init(readers[name]);
 
-                if (!outputs.ContainsKey(name))
-                    outputs[name] = new WaveOutEvent();
+                // LOOP SUPPORT
+                if (track.Loop)
+                {
+                    output.PlaybackStopped += (s, e) =>
+                    {
+                        readers[name].Position = 0;
+                        output.Play();
+                    };
+                }
 
-                outputs[name].Init(readers[name]);
-                outputs[name].Volume = track.Volume;
-                outputs[name].Play();
+                outputs[name] = output;
             }
+
+            outputs[name].Play();
         }
+
 
         public void Stop(string name)
         {
@@ -54,27 +72,29 @@ namespace GameFrameWork.Component
                 output.Stop();
                 output.Dispose();
                 outputs.Remove(name);
+            }
 
-                if (readers.ContainsKey(name))
-                {
-                    readers[name].Dispose();
-                    readers.Remove(name);
-                }
+            if (readers.TryGetValue(name, out var reader))
+            {
+                reader.Dispose();
+                readers.Remove(name);
             }
         }
 
         public void StopAll()
         {
             foreach (var output in outputs.Values)
+            {
                 output.Stop();
-            foreach (var output in outputs.Values)
                 output.Dispose();
+            }
             outputs.Clear();
 
             foreach (var reader in readers.Values)
                 reader.Dispose();
             readers.Clear();
         }
+
 
         public void SetVolume(string name, float volume)
         {

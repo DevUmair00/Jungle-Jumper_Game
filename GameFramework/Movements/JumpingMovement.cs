@@ -23,6 +23,7 @@ namespace GameFrameWork.Movements
                 obj.Velocity = new PointF(obj.Velocity.X, -jumpForce);
                 obj.HasPhysics = true;   // gravity ON
                 canJump = false;         // prevent double jump
+                Game.Audio.Play("jump");
             }
         }
 

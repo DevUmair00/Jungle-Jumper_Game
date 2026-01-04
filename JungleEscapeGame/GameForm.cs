@@ -1,5 +1,6 @@
 ﻿using EZInput;
 using GameFrameWork.Core;
+using GameFrameWork.Component;
 using GameFrameWork.Entities;
 using GameFrameWork.Extentions;
 using GameFrameWork.System;
@@ -19,6 +20,7 @@ namespace JungleEscapeGame
 
     public partial class GameForm : Form
     {
+
         private Game game = new Game();
         private PhysicsSystem physics = new PhysicsSystem();
         private CollisionSystem collisions = new CollisionSystem();

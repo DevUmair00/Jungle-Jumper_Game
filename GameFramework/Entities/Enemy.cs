@@ -69,7 +69,7 @@ namespace GameFrameWork.Entities
             if (other is Bullet)
             {
                 other.IsActive = false;
-
+                Game.Audio.Play("hit");
                 IsActive = false;
             }
 
@@ -78,6 +78,7 @@ namespace GameFrameWork.Entities
             if (other is Player player)
             {
                 player.TakeDamage(10);
+                Game.Audio.Play("hit");
                 ReverseDirection();
                 return;
             }

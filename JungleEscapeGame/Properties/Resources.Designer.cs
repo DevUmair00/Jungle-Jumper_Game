@@ -81,6 +81,15 @@ namespace JungleEscapeGame.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream coinPickup {
+            get {
+                return ResourceManager.GetStream("coinPickup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap enemy1 {
@@ -197,6 +206,15 @@ namespace JungleEscapeGame.Properties {
             get {
                 object obj = ResourceManager.GetObject("mediumBox", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream menu_Music {
+            get {
+                return ResourceManager.GetStream("menu_Music", resourceCulture);
             }
         }
         
