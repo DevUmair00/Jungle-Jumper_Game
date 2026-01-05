@@ -33,6 +33,9 @@ namespace JungleEscapeGame
 
         float worldWidth;
 
+        private int Level;
+
+
         int currentLevel = 1;
 
         public GameForm(int StartLevel)
@@ -41,13 +44,15 @@ namespace JungleEscapeGame
             DoubleBuffered = true;
             ClientSize = new Size(800, 500);
 
-            this.currentLevel = 3; // Set the level from the menu
+            this.currentLevel = StartLevel; // Set the level from the menu
             LoadLevel();
         }
+
 
         void LoadLevel()
         {
             game.Objects.Clear();
+            level = null;
 
             if (currentLevel == 1)
             {
@@ -68,6 +73,7 @@ namespace JungleEscapeGame
             if (level != null)
             {
                 level.Load(game);
+
                 player = level.Player;
 
                 this.BackgroundImage = level.BackgroundImage;
@@ -75,7 +81,9 @@ namespace JungleEscapeGame
             }
 
             GameState.LevelCompleted = false;
+            GameState.GameOver = false;
         }
+
 
 
         protected override void OnPaint(PaintEventArgs e)
@@ -173,55 +181,61 @@ namespace JungleEscapeGame
             }
         }
 
+
         private void gameTimer_Tick(object sender, EventArgs e)
         {
-            // If the game is over, stop updating but keep drawing
             if (GameState.GameOver)
             {
-                Invalidate(); // Keep drawing the Game Over screen
+                Invalidate();
                 return;
             }
 
-            if (player.Lives <= 0) // Check lives instead of IsActive
-            {
-                GameState.GameOver = true;
-                return;
-            }
+            var gameTime = new GameTime(deltaTime);
 
-            if (GameState.LevelCompleted)
-            {
-                //currentLevel++;
-                LoadLevel();
-            }
+            game.Update(gameTime);
 
-            if (currentLevel != null)
-            {
-                level?.UpdateBullets(new GameTime(deltaTime), game);
-            }
-
-            if (currentLevel == null)
-                throw new Exception("CurrentLevel is NULL");
-
-
-            // Update bullets (spawn, move, remove)
-
-            game.Update(new GameTime(deltaTime));
             physics.Apply(game.Objects);
             collisions.Check(game.Objects);
+
             game.Cleanup();
 
-            cameraOffset = new PointF(Math.Max(0, Math.Min(player.Position.X - ClientSize.Width / 2, worldWidth - ClientSize.Width)), 0);
+            cameraOffset = new PointF(
+                Math.Max(0, Math.Min(
+                    player.Position.X - ClientSize.Width / 2,
+                    worldWidth - ClientSize.Width)),
+                0
+            );
 
+            if (player.Lives <= 0)
+            {
+                GameState.GameOver = true;
+                ShowGameOver();
+                return;
+            }
 
             if (GameState.LevelCompleted)
             {
-                currentLevel++;
-                SaveSystem.SaveLevel(currentLevel); // Save progress to the file
-                LoadLevel();
-            }   
-
+                ShowWin();
+                return;
+            }
 
             Invalidate();
         }
+
+
+        private void ShowWin()
+        {
+            this.Hide();
+            WinForm win = new WinForm(currentLevel);
+            win.Show();
+        }
+
+        private void ShowGameOver()
+        {
+            this.Hide();
+            GameOverForm over = new GameOverForm(currentLevel);
+            over.Show();
+        }
+
     }
 }

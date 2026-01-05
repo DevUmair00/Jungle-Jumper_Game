@@ -12,6 +12,7 @@ public class Player : GameObject
     public int Score { get; set; } = 0;
 
     public int Keys { get; set; } = 0;
+
     public bool ReachedExit { get; private set; }
 
 
@@ -38,9 +39,12 @@ public class Player : GameObject
         if (fireTimer > 0)
             return null;
 
+
         fireTimer = fireCooldown;
 
+
         Game.Audio.Play("shoot");
+
 
         // Create bullet at player's position
         return new Bullet
