@@ -14,6 +14,8 @@ namespace JungleEscapeGame.Levels
 
         public List<Bullet> Bullets { get; } = new List<Bullet>();
 
+        public Bitmap BackgroundImage => Properties.Resources.bg1;
+
 
         public void Load(Game game)
         {

@@ -41,7 +41,7 @@ namespace JungleEscapeGame
             DoubleBuffered = true;
             ClientSize = new Size(800, 500);
 
-            this.currentLevel = 2; // Set the level from the menu
+            this.currentLevel = StartLevel; // Set the level from the menu
             LoadLevel();
         }
 
@@ -62,6 +62,9 @@ namespace JungleEscapeGame
             {
                 level.Load(game);
                 player = level.Player;
+
+                this.BackgroundImage = level.BackgroundImage;
+                this.BackgroundImageLayout = ImageLayout.Stretch;
             }
 
             GameState.LevelCompleted = false;
@@ -156,7 +159,11 @@ namespace JungleEscapeGame
 
         private void DrawBackground(Graphics g)
         {
-            g.DrawImage(Properties.Resources.bg1, 0, 0, 800, 500);
+            // Use level.BackgroundImage instead of a specific resource
+            if (level != null && level.BackgroundImage != null)
+            {
+                g.DrawImage(level.BackgroundImage, 0, 0, 800, 500);
+            }
         }
 
         private void gameTimer_Tick(object sender, EventArgs e)
@@ -176,7 +183,7 @@ namespace JungleEscapeGame
 
             if (GameState.LevelCompleted)
             {
-                //currentLevel++;
+                currentLevel++;
                 LoadLevel();
             }
 

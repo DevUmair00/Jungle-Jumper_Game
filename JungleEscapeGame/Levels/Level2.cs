@@ -10,24 +10,65 @@ namespace JungleEscapeGame.Levels
     public class Level2 : ILevel
     {
         public Player Player { get; private set; }
+        public Enemy Enemy { get; private set; }
         public List<Enemy> Enemies { get; } = new();
         public List<Bullet> Bullets { get; } = new List<Bullet>();
 
+        public Bitmap BackgroundImage => Properties.Resources.bg2;
+
         public void Load(Game game)
         {
-            // Clear previous level data if any
-            game.Objects.Clear();
+
+            // Clear previous level data if any
+            game.Objects.Clear();
             Enemies.Clear();
             Bullets.Clear();
 
-            float worldWidth = 3500f; // Made Level 2 a bit longer
-            float worldHeight = 500f;
+            float worldWidth = 5000f; // Made Level 2 a bit longer
+            float worldHeight = 500f;
             float floorHeight = 64f;
             float groundY = worldHeight - floorHeight;
 
 
-            // ================= PLAYER =================
-            Player = new Player
+
+
+            // ================= FLOOR =================
+
+            game.AddObject(new GameObject
+            {
+                Name = "Floor",
+                Position = new PointF(0, groundY + 15),
+                Size = new SizeF(worldWidth, floorHeight),
+                IsRigidBody = true,
+                Visible = false
+            });
+
+
+            // ================= BOUNDARIES = start =================
+
+            game.AddObject(new GameObject
+            {
+                Name = "Wall",
+                Position = new PointF(0, 0),
+                Size = new SizeF(10, worldHeight),
+                IsRigidBody = true,
+                Visible = false
+            });
+
+            // ================= BOUNDARIES = end =================
+
+            game.AddObject(new GameObject
+            {
+                Name = "Wall",
+                Position = new PointF(4500, 0),
+                Size = new SizeF(10, worldHeight),
+                IsRigidBody = true,
+                Visible = false
+            });
+
+
+            // ================= PLAYER =================
+            Player = new Player
             {
                 Name = "Player",
                 Position = new PointF(100, groundY - 130),
@@ -36,71 +77,106 @@ namespace JungleEscapeGame.Levels
                 HasPhysics = true
             };
             Player.AddMovement(new KeyboardMovement(5)); // Slightly faster for Level 2
-            Player.AddMovement(new JumpingMovement(17f)); // Slightly higher jump
-            game.AddObject(Player);
+            Player.AddMovement(new JumpingMovement(17f)); // Slightly higher jump
+            game.AddObject(Player);
 
 
 
-            // ================= ENEMIES (Updated for Level 2) =================
+            // ================= ENEMIES =================
 
-            AddEnemy(game, Properties.Resources.enemy2, 500, groundY - 60, 400, 900);
-            AddEnemy(game, Properties.Resources.enemy2, 1100, groundY - 60, 1000, 1500);
-            AddEnemy(game, Properties.Resources.enemy3, 1800, groundY - 60, 1600, 2200);
+            AddEnemy(game, Properties.Resources.enemy2, 500, groundY - 60);
+            AddEnemy(game, Properties.Resources.enemy2, 1600, groundY - 60);
+            AddEnemy(game, Properties.Resources.enemy3, 1350, groundY - 60);
+            //AddEnemy(game, Properties.Resources.enemy3, 1450, groundY - 60);
 
 
-            // ================= FLOOR =================
+            // Example: Adding a ghost that haunts the middle area
 
-            game.AddObject(new GameObject
-            {
-                Name = "Floor",
-                Position = new PointF(0, groundY),
-                Size = new SizeF(worldWidth, floorHeight),
-                IsRigidBody = true,
-                Visible = false
-            });
+            AddGhost(game, Properties.Resources.ghost, 300, 50, 200f, 1200f, 20f, 350f, 5f);
 
-            // ================= BOUNDARIES = sender =================
-            game.AddObject(new GameObject { Name = "Wall", Position = new PointF(0, 0), Size = new SizeF(10, worldHeight), IsRigidBody = true, Visible = false });
+            AddGhost(game, Properties.Resources.ghost, 1400, 150, 1300f, 2200f, 20f, 350f, 4f);
+            AddGhost(game, Properties.Resources.ghost, 1400, 150, 1300f, 2200f, 20f, 350f, 4f);
 
-            // ================= NEW PLATFORM LAYOUT (Verticality) =================
+            //// Example: Adding a second, faster ghost near the end of the level
 
-            // Staircase effect
-            CreateBrick(game, 400, groundY - 100);
+
+            // ================= Boxes =================
+
+            CreateBox(game, 230, groundY - 60);
+            CreateBox(game, 285, groundY - 60);
+            CreateBox(game, 255, groundY - 120);
+
+
+            CreateBox(game, 880, groundY - 60);
+            CreateBox(game, 941, groundY - 60);
+            CreateBox(game, 941, groundY - 120);
+
+
+
+            CreateBox(game, 1692, groundY - 60);
+            CreateBox(game, 1692, groundY - 120);
+            CreateBox(game, 1692, groundY - 180);
+            CreateBox(game, 1752, groundY - 60);
+            CreateBox(game, 1752, groundY - 120);
+            CreateBox(game, 1812, groundY - 60);
+
+
+
+
+            // ================= NEW PLATFORM LAYOUT (Verticality) =================
+
+
+
+            // Staircase effect
+            CreateBrick(game, 400, groundY - 100);
             CreateBrick(game, 600, groundY - 200);
-            CreateBrick(game, 850, groundY - 280);
+            CreateBrick(game, 870, groundY - 280);
 
-            // High Platform with Key
-            game.AddObject(new GameObject
+
+            // "Bridge" Platforms
+
+            CreateBrick(game, 1000, groundY - 90);
+            CreateBrick(game, 1500, groundY - 90);
+
+
+
+
+            // High Platform with Key
+
+            game.AddObject(new GameObject
             {
                 Name = "Wall",
-                Position = new PointF(1200, groundY - 250),
-                Size = new SizeF(300, 40),
+                Position = new PointF(1250, groundY - 250),
+                Size = new SizeF(200, 200),
                 Sprite = Properties.Resources.plus,
                 IsRigidBody = true
             });
 
-            // "Bridge" Platforms
-            CreateBrick(game, 1700, groundY - 180);
-            CreateBrick(game, 2000, groundY - 180);
+
+
 
             // ================= KEY (Placed Higher) =================
             game.AddObject(new GameObject
             {
                 Name = "Key",
-                Position = new PointF(1350, groundY - 300),
+                Position = new PointF(1320, groundY - 67),
                 Size = new SizeF(35, 35),
                 Sprite = Properties.Resources.key,
                 IsRigidBody = false,
                 HasPhysics = false
             });
 
-            // ================= COINS =================
+
+
+
+           //================= COINS =================
+
             for (int i = 0; i < 10; i++)
             {
                 game.AddObject(new GameObject
                 {
                     Name = "Coin",
-                    Position = new PointF(500 + (i * 150), groundY - 150 - (i % 2 * 50)),
+                    Position = new PointF(500 + (i * 180), groundY - 150 - (i % 2 * 50)),
                     Size = new SizeF(20, 20),
                     Sprite = Properties.Resources.coin,
                     IsRigidBody = false,
@@ -108,11 +184,23 @@ namespace JungleEscapeGame.Levels
                 });
             }
 
+        
+        
+            // ================= EXIT =================
+            game.AddObject(new GameObject
+            {
+                Name = "Exit",
+                Position = new PointF(worldWidth - 200, groundY - 250),
+                Size = new SizeF(200, 250),
+                Sprite = Properties.Resources.exit,
+                IsRigidBody = true
+            });
+
             // ================= EXIT =================
             game.AddObject(new GameObject
             {
                 Name = "Exit",
-                Position = new PointF(worldWidth - 250, groundY - 250),
+                Position = new PointF(worldWidth - 200, groundY - 250),
                 Size = new SizeF(200, 250),
                 Sprite = Properties.Resources.exit,
                 IsRigidBody = true
@@ -120,11 +208,12 @@ namespace JungleEscapeGame.Levels
 
             // Switch to Level 2 Music
             Game.Audio.Stop("level1_music");
-            Game.Audio.Play("level2_music");
+                Game.Audio.Play("level2_music");
         }
 
-        // Helper methods to keep code clean
-        private void AddEnemy(Game game, Bitmap sprite, float x, float y, float minX, float maxX)
+
+        // Helper methods to keep code clean
+        private void AddEnemy(Game game, Bitmap sprite, float x, float y)
         {
             var e = new Enemy
             {
@@ -137,6 +226,36 @@ namespace JungleEscapeGame.Levels
             };
             Enemies.Add(e);
             game.AddObject(e);
+        }
+
+        private void AddGhost(Game game, Bitmap sprite, float startX, float startY, float minX, float maxX, float minY, float maxY, float speed)
+        {
+            var ghost = new Enemy
+            {
+                Name = "Enemy",
+                Sprite = sprite,
+                Position = new PointF(startX, startY),
+                Size = new SizeF(60, 60),
+                HasPhysics = false, // Ghost flies
+                IsRigidBody = false,
+                Movement = new RandomPatrolMovement(minX, maxX, minY, maxY, speed)
+            };
+
+            Enemies.Add(ghost);
+            game.AddObject(ghost);
+        }
+
+
+        private void CreateBox(Game game, float x, float y)
+        {
+            game.AddObject(new GameObject
+            {
+                Name = "Wall",
+                Position = new PointF(x, y),
+                Size = new SizeF(60, 60),
+                Sprite = Properties.Resources.woodBox,
+                IsRigidBody = true
+            });
         }
 
         private void CreateBrick(Game game, float x, float y)

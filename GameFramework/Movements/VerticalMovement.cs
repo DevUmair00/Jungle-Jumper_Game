@@ -4,7 +4,7 @@ using GameFrameWork.Interfaces;
 
 namespace GameFrameWork.Movements
 {
-    internal class VerticalMovement : IMovement
+    public class VerticalMovement : IMovement
     {
         private float topBound;
         private float bottomBound;

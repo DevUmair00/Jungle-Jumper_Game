@@ -4,7 +4,7 @@ using GameFrameWork.Interfaces;
 
 namespace GameFrameWork.Movements
 {
-    internal class ZigZagMovement : IMovement
+    public class ZigZagMovement : IMovement
     {
 
 
