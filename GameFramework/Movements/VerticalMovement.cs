@@ -1,4 +1,6 @@
-﻿using GameFrameWork.Core;
+﻿using System;
+using System.Drawing;
+using GameFrameWork.Core;
 using GameFrameWork.Entities;
 using GameFrameWork.Interfaces;
 
@@ -9,24 +11,30 @@ namespace GameFrameWork.Movements
         private float topBound;
         private float bottomBound;
         private float speed;
+
         public VerticalMovement(float topBound, float bottomBound, float speed)
         {
             this.topBound = topBound;
             this.bottomBound = bottomBound;
             this.speed = speed;
         }
+
         public void Move(GameObject obj, GameTime gameTime)
         {
-            obj.Position = new PointF(obj.Position.X, obj.Position.Y + speed);
+            obj.Position = new PointF(
+                obj.Position.X,
+                obj.Position.Y + speed
+            );
+
             if (obj.Position.Y < topBound)
             {
                 obj.Position = new PointF(obj.Position.X, topBound);
-                speed = Math.Abs(speed); // Move down
+                speed = Math.Abs(speed);      // move down
             }
             else if (obj.Position.Y > bottomBound)
             {
                 obj.Position = new PointF(obj.Position.X, bottomBound);
-                speed = -Math.Abs(speed); // Move up
+                speed = -Math.Abs(speed);     // move up
             }
         }
     }

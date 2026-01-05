@@ -50,7 +50,7 @@ public class Player : GameObject
                 Position.X + Size.Width, // Spawn at front of player
                 Position.Y + (Size.Height / 2) - 5 // Center vertically
             ),
-            Size = new SizeF(15, 10),
+            Size = new SizeF(10, 4),
             HasPhysics = false // Bullets usually ignore gravity
         };
     }

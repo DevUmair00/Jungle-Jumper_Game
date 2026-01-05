@@ -31,7 +31,7 @@ namespace JungleEscapeGame
 
         private float deltaTime = 0.016f;
 
-        float worldWidth = 2500f;
+        float worldWidth;
 
         int currentLevel = 1;
 
@@ -41,7 +41,7 @@ namespace JungleEscapeGame
             DoubleBuffered = true;
             ClientSize = new Size(800, 500);
 
-            this.currentLevel = StartLevel; // Set the level from the menu
+            this.currentLevel = 3; // Set the level from the menu
             LoadLevel();
         }
 
@@ -52,10 +52,17 @@ namespace JungleEscapeGame
             if (currentLevel == 1)
             {
                 level = new Level1();
+                worldWidth = 2500;
             }
             else if (currentLevel == 2)
             {
                 level = new Level2();
+                worldWidth = 2500;
+            }
+            else if (currentLevel == 3)
+            {
+                level = new Level3();
+                worldWidth = 3500;
             }
 
             if (level != null)
@@ -183,13 +190,20 @@ namespace JungleEscapeGame
 
             if (GameState.LevelCompleted)
             {
-                currentLevel++;
+                //currentLevel++;
                 LoadLevel();
             }
 
+            if (currentLevel != null)
+            {
+                level?.UpdateBullets(new GameTime(deltaTime), game);
+            }
+
+            if (currentLevel == null)
+                throw new Exception("CurrentLevel is NULL");
+
 
             // Update bullets (spawn, move, remove)
-            level?.UpdateBullets(new GameTime(deltaTime), game);
 
             game.Update(new GameTime(deltaTime));
             physics.Apply(game.Objects);
@@ -204,7 +218,7 @@ namespace JungleEscapeGame
                 currentLevel++;
                 SaveSystem.SaveLevel(currentLevel); // Save progress to the file
                 LoadLevel();
-            }
+            }   
 
 
             Invalidate();

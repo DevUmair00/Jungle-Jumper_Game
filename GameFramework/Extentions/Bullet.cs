@@ -15,7 +15,7 @@ namespace GameFrameWork.Extentions
         }
 
 
-        public float Speed { get; set; } = 5f;
+        public float Speed { get; set; } = 15f;
 
         public PointF Direction { get; set; } = new PointF(1, 0); // Default moves right
 

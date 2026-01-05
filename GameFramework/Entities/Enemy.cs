@@ -60,7 +60,8 @@ namespace GameFrameWork.Entities
         public override void OnCollision(GameObject other)
         {
             // Bullet hits enemy
-            if (other is Bullet)
+
+            if (other is Bullet && !(this.Name == "FireBall") && (this.Name == "Ghost"))
             {
                 other.IsActive = false;
                 Game.Audio.Play("hit");
